@@ -589,4 +589,127 @@ void Cheetah3HardwareBridge::run() {
   }
 }
 
+/*!
+* BiQuHardwareBridge constructor
+*/
+
+/
+BiQuHardwareBridge::BiQuHardwareBridge(RobotController* robot_ctrl, bool load_parameters_from_file)
+    : HardwareBridge(robot_ctrl), _spiLcm(getLcmUrl(255)), _microstrainLcm(getLcmUrl(255)) {
+  _load_parameters_from_file = load_parameters_from_file;
+}
+
+/*!
+ * Main method for BiQu hardware
+ */
+void BiQuHardwareBridge::run() {
+  initCommon();
+  initHardware();
+
+  if(_load_parameters_from_file) {
+    printf("[Hardware Bridge] Loading parameters from file...\n");
+
+    try {
+      _robotParams.initializeFromYamlFile(THIS_COM "config/mini-cheetah-defaults.yaml");
+    } catch(std::exception& e) {
+      printf("Failed to initialize robot parameters from yaml file: %s\n", e.what());
+      exit(1);
+    }
+
+    if(!_robotParams.isFullyInitialized()) {
+      printf("Failed to initialize all robot parameters\n");
+      exit(1);
+    }
+
+    printf("Loaded robot parameters\n");
+
+    if(_userControlParameters) {
+      try {
+        _userControlParameters->initializeFromYamlFile(THIS_COM "config/mc-mit-ctrl-user-parameters.yaml");
+      } catch(std::exception& e) {
+        printf("Failed to initialize user parameters from yaml file: %s\n", e.what());
+        exit(1);
+      }
+
+      if(!_userControlParameters->isFullyInitialized()) {
+        printf("Failed to initialize all user parameters\n");
+        exit(1);
+      }
+
+      printf("Loaded user parameters\n");
+    } else {
+      printf("Did not load user parameters because there aren't any\n");
+    }
+  } else {
+    printf("[Hardware Bridge] Loading parameters over LCM...\n");
+    while (!_robotParams.isFullyInitialized()) {
+      printf("[Hardware Bridge] Waiting for robot parameters...\n");
+      usleep(1000000);
+    }
+
+    if(_userControlParameters) {
+      while (!_userControlParameters->isFullyInitialized()) {
+        printf("[Hardware Bridge] Waiting for user parameters...\n");
+        usleep(1000000);
+      }
+    }
+  }
+
+
+
+  printf("[Hardware Bridge] Got all parameters, starting up!\n");
+
+  _robotRunner =
+      new RobotRunner(_controller, &taskManager, _robotParams.controller_dt, "robot-control");
+
+  _robotRunner->driverCommand = &_gamepadCommand;
+  _robotRunner->spiData = &_spiData;
+  _robotRunner->spiCommand = &_spiCommand;
+  _robotRunner->robotType = RobotType::BIQU;
+  _robotRunner->camVectorNavData = &_camVectorNavData;
+  _robotRunner->controlParameters = &_robotParams;
+  _robotRunner->visualizationData = &_visualizationData;
+  _robotRunner->cheetahMainVisualization = &_mainCheetahVisualization;
+
+  _firstRun = false;
+
+  // init control thread
+
+  statusTask.start();
+
+  // spi Task start
+  PeriodicMemberFunction<MiniCheetahHardwareBridge> spiTask(
+      &taskManager, .002, "spi", &MiniCheetahHardwareBridge::runSpi, this);
+  spiTask.start();
+
+  // microstrain
+  if(_microstrainInit)
+    _microstrainThread = std::thread(&MiniCheetahHardwareBridge::runMicrostrain, this);
+
+  // robot controller start
+  _robotRunner->start();
+
+  // visualization start
+  PeriodicMemberFunction<MiniCheetahHardwareBridge> visualizationLCMTask(
+      &taskManager, .0167, "lcm-vis",
+      &MiniCheetahHardwareBridge::publishVisualizationLCM, this);
+  visualizationLCMTask.start();
+
+  // rc controller
+  _port = init_sbus(false);  // Not Simulation
+  PeriodicMemberFunction<HardwareBridge> sbusTask(
+      &taskManager, .005, "rc_controller", &HardwareBridge::run_sbus, this);
+  sbusTask.start();
+
+  // temporary hack: microstrain logger
+  PeriodicMemberFunction<MiniCheetahHardwareBridge> microstrainLogger(
+      &taskManager, .001, "microstrain-logger", &MiniCheetahHardwareBridge::logMicrostrain, this);
+  microstrainLogger.start();
+
+  for (;;) {
+    usleep(1000000);
+    // printf("joy %f\n", _robotRunner->driverCommand->leftStickAnalog[0]);
+  }
+}
+
 #endif

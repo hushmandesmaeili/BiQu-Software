@@ -48,7 +48,7 @@ void RobotRunner::init() {
   // Always initialize the leg controller and state entimator
   _legController = new LegController<float>(_quadruped);
   _stateEstimator = new StateEstimatorContainer<float>(
-      cheaterState, vectorNavData, _legController->datas,
+      cheaterState, vectorNavData,camVectorNavData, _legController->datas,
       &_stateEstimate, controlParameters);
   initializeStateEstimator(false);
 
@@ -221,7 +221,7 @@ void RobotRunner::finalizeStep() {
  * Reset the state estimator in the given mode.
  * @param cheaterMode
  */
-void RobotRunner::initializeStateEstimator(bool cheaterMode) {
+void RobotRunner::initializeStateEstimator(bool cheaterMode, bool biQu) {
   _stateEstimator->removeAllEstimators();
   _stateEstimator->addEstimator<ContactEstimator<float>>();
   Vec4<float> contactDefault;
@@ -230,7 +230,12 @@ void RobotRunner::initializeStateEstimator(bool cheaterMode) {
   if (cheaterMode) {
     _stateEstimator->addEstimator<CheaterOrientationEstimator<float>>();
     _stateEstimator->addEstimator<CheaterPositionVelocityEstimator<float>>();
-  } else {
+  } 
+  else if(biQu){
+  _stateEstimator->addEstimator<VectorNavOrientationEstimator<float>>();
+  _stateEstimator->addEstimator<LinearKFPositionVelocityEstimator<float>>();
+  }
+  else {
     _stateEstimator->addEstimator<VectorNavOrientationEstimator<float>>();
     _stateEstimator->addEstimator<LinearKFPositionVelocityEstimator<float>>();
   }

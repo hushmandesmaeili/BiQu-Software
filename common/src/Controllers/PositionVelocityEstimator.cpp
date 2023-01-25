@@ -174,6 +174,7 @@ void LinearKFPositionVelocityEstimator<T>::run() {
     _P.block(2, 0, 16, 2).setZero();
     _P.block(0, 0, 2, 2) /= T(10);
   }
+  
 
   this->_stateEstimatorData.result->position = _xhat.block(0, 0, 3, 1);
   this->_stateEstimatorData.result->vWorld = _xhat.block(3, 0, 3, 1);
