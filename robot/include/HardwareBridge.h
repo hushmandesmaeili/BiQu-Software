@@ -125,5 +125,28 @@ private:
   ecat_data_t ecatDataLcm;
   // nothing?
 };
+
+class BiQuHardwareBridge : public HardwareBridge {
+ public:
+  BiQuHardwareBridge(RobotController* rc, bool load_parameters_from_file);
+  void runSpi();
+  void initHardware();
+  void run();
+  void runMicrostrain();
+  void logMicrostrain();
+  void abort(const std::string& reason);
+  void abort(const char* reason);
+
+ private:
+  CamVectorNavData _camVectorNavData;
+  lcm::LCM _spiLcm;
+  lcm::LCM _microstrainLcm;
+  std::thread _microstrainThread;
+  // LordImu _microstrainImu;
+  microstrain_lcmt _microstrainData;
+  bool _microstrainInit = false;
+  bool _load_parameters_from_file;
+};
+
 #endif // END of #ifdef linux
 #endif  // PROJECT_HARDWAREBRIDGE_H
