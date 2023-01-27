@@ -14,14 +14,18 @@
 
 #define termios asmtermios
 
-#include <asm/termios.h>
-
+// #include <asm/termios.h>
+// Issue #39: Solving include error
+#include <asm/ioctls.h>
+#include <asm/ioctl.h>
+#include <asm/termbits.h>
 #undef termios
 
 #include <termios.h>
 #include <math.h>
 #include <pthread.h>
-#include <stropts.h>
+#include <sys/ioctl.h>
+// #include <stropts.h>
 #include <endian.h>
 #include <stdint.h>
 
