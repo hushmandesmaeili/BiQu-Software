@@ -11,13 +11,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-//***** the next three lines and the <stropts.h> were commented because of compiling error. See this page: https://github.com/mit-biomimetics/Cheetah-Software/issues/39
-// #define termios asmtermios
 
-// #include <asm/termios.h>  
-// #undef termios
-
-// #include <asm/termios.h>
 // Issue #39: Solving include error
 #include <asm/ioctls.h>
 #include <asm/ioctl.h>
