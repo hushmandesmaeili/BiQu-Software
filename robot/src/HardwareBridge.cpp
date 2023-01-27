@@ -592,8 +592,6 @@ void Cheetah3HardwareBridge::run() {
 /*!
 * BiQuHardwareBridge constructor
 */
-
-/
 BiQuHardwareBridge::BiQuHardwareBridge(RobotController* robot_ctrl, bool load_parameters_from_file)
     : HardwareBridge(robot_ctrl), _spiLcm(getLcmUrl(255)), _microstrainLcm(getLcmUrl(255)) {
   _load_parameters_from_file = load_parameters_from_file;
@@ -678,38 +676,73 @@ void BiQuHardwareBridge::run() {
   statusTask.start();
 
   // spi Task start
-  PeriodicMemberFunction<MiniCheetahHardwareBridge> spiTask(
-      &taskManager, .002, "spi", &MiniCheetahHardwareBridge::runSpi, this);
-  spiTask.start();
+  // PeriodicMemberFunction<BiQuHardwareBridge> spiTask(
+  //     &taskManager, .002, "spi", &BiQuHardwareBridge::runSpi, this);
+  // spiTask.start();
 
-  // microstrain
-  if(_microstrainInit)
-    _microstrainThread = std::thread(&MiniCheetahHardwareBridge::runMicrostrain, this);
+  // tCam
+  if(_tCamInit)
+    _poseThread = std::thread(&BiQuHardwareBridge::runTCam, this);
 
   // robot controller start
   _robotRunner->start();
 
   // visualization start
-  PeriodicMemberFunction<MiniCheetahHardwareBridge> visualizationLCMTask(
-      &taskManager, .0167, "lcm-vis",
-      &MiniCheetahHardwareBridge::publishVisualizationLCM, this);
-  visualizationLCMTask.start();
+  // PeriodicMemberFunction<BiQuHardwareBridge> visualizationLCMTask(
+  //     &taskManager, .0167, "lcm-vis",
+  //     &MiniCheetahHardwareBridge::publishVisualizationLCM, this);
+  // visualizationLCMTask.start();
 
   // rc controller
-  _port = init_sbus(false);  // Not Simulation
-  PeriodicMemberFunction<HardwareBridge> sbusTask(
-      &taskManager, .005, "rc_controller", &HardwareBridge::run_sbus, this);
-  sbusTask.start();
+  // _port = init_sbus(false);  // Not Simulation
+  // PeriodicMemberFunction<HardwareBridge> sbusTask(
+  //     &taskManager, .005, "rc_controller", &HardwareBridge::run_sbus, this);
+  // sbusTask.start();
 
-  // temporary hack: microstrain logger
-  PeriodicMemberFunction<MiniCheetahHardwareBridge> microstrainLogger(
-      &taskManager, .001, "microstrain-logger", &MiniCheetahHardwareBridge::logMicrostrain, this);
-  microstrainLogger.start();
+  // // temporary hack: microstrain logger
+  // PeriodicMemberFunction<MiniCheetahHardwareBridge> microstrainLogger(
+  //     &taskManager, .001, "microstrain-logger", &MiniCheetahHardwareBridge::logMicrostrain, this);
+  // microstrainLogger.start();
 
-  for (;;) {
-    usleep(1000000);
-    // printf("joy %f\n", _robotRunner->driverCommand->leftStickAnalog[0]);
-  }
+  // for (;;) {
+  //   usleep(1000000);
+  //   // printf("joy %f\n", _robotRunner->driverCommand->leftStickAnalog[0]);
+  // }
 }
 
+void BiQuHardwareBridge::initHardware() {
+  _tCamInit = _tCam.init();
+}
+
+void BiQuHardwareBridge::runTCam() {
+  while(true) {
+    _tCam.get_pose();
+
+#ifdef USE_MICROSTRAIN
+    _camVectorNavData.x= _tCam.pose.x;
+    _camVectorNavData.y= _tCam.pose.y;
+    _camVectorNavData.z= _tCam.pose.z;
+
+    _camVectorNavData.acc_x = _tCam.pose.acc_x;
+    _camVectorNavData.acc_y = _tCam.pose.acc_y;
+    _camVectorNavData.acc_z = _tCam.pose.acc_z;
+
+    _camVectorNavData.ang_vel_x = _tCam.pose.ang_vel_x;
+    _camVectorNavData.ang_vel_y = _tCam.pose.ang_vel_y;
+    _camVectorNavData.ang_vel_z = _tCam.pose.ang_vel_z;
+
+    _camVectorNavData.vel_x = _tCam.pose.vel_x;
+    _camVectorNavData.vel_y = _tCam.pose.vel_y;
+    _camVectorNavData.vel_z = _tCam.pose.vel_z;
+
+    _camVectorNavData.rot_w = _tCam.pose.rot_w;
+    _camVectorNavData.rot_x = _tCam.pose.rot_x;
+    _camVectorNavData.rot_y = _tCam.pose.rot_y;
+    _camVectorNavData.rot_z = _tCam.pose.rot_z;
+
+#endif
+  }
+
+
+}
 #endif

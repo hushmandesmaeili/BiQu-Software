@@ -38,7 +38,7 @@ class RobotRunner : public PeriodicTask {
   void cleanup() override;
 
   // Initialize the state estimator with default no cheaterMode
-  void initializeStateEstimator(bool cheaterMode = false);
+  void initializeStateEstimator(bool cheaterMode = false, bool biQu=true);
   virtual ~RobotRunner();
 
   RobotController* _robot_ctrl;

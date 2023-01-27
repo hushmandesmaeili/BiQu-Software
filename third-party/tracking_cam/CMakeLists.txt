@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.1.0)
-add_library(librealsense)
+##project(t_cam)
+set(DEPENDENCIES realsense2)
 add_executable(tracking_cam TCam.cpp)
 set_property(TARGET tracking_cam PROPERTY CXX_STANDARD 11)
-target_link_libraries(tracking_cam tracking_cam)
+target_link_libraries(tracking_cam ${DEPENDENCIES})

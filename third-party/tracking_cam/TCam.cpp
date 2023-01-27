@@ -3,13 +3,22 @@
 #include <thread>
 
 static std::mutex dataMutex;
-void TCam::init(){
+bool TCam::init(){
+try{
 p.start();
+return true;
+}
+catch (const rs2::error & e)
+{
+    std::cerr << "RealSense error calling " << e.get_failed_function() << "(" << e.get_failed_args() << "):\n    " << e.what() << std::endl;
+    return false;
+}
+
 }
 
 void TCam::get_pose(){
-
-    dataMutex.lock();
+    try{
+         dataMutex.lock();
 // Wait for the next set of frames from the camera
     auto frames = p.wait_for_frames();
     // Get a frame from the pose stream
@@ -39,5 +48,13 @@ void TCam::get_pose(){
 
 
     dataMutex.unlock();
+    }
+    catch (const rs2::error & e)
+    {
+    std::cerr << "RealSense error calling " << e.get_failed_function() << "(" << e.get_failed_args() << "):\n    " << e.what() << std::endl;
+    }
+   
 
 }
+
+

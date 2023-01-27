@@ -6,6 +6,7 @@ add_subdirectory(JCQP)
 add_subdirectory(qpOASES)
 add_subdirectory(lord_imu)
 add_subdirectory(SOEM)
+add_subdirectory(tracking_cam)
 
 if(CMAKE_SYSTEM_NAME MATCHES Linux)
 add_subdirectory(vectornav)

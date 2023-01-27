@@ -219,7 +219,7 @@ void RobotRunner::finalizeStep() {
 
 /*!
  * Reset the state estimator in the given mode.
- * @param cheaterMode
+ * @param cheaterMode, biQu
  */
 void RobotRunner::initializeStateEstimator(bool cheaterMode, bool biQu) {
   _stateEstimator->removeAllEstimators();

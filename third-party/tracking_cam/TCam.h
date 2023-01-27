@@ -1,4 +1,5 @@
 #include <librealsense2/rs.hpp> 
+#include <iostream>
 
 struct Pose{
     // Wait for the next set of frames from the camera
@@ -12,7 +13,7 @@ struct Pose{
 
 class TCam{
 public:
-    void init();
+    bool init();
     void get_pose();
     Pose pose;
 

@@ -96,12 +96,13 @@ class StateEstimatorContainer {
    * Construct a new state estimator container
    */
   StateEstimatorContainer(CheaterState<double>* cheaterState,
-                          VectorNavData* vectorNavData, CamVectorNavData* camVectorNavData
+                          VectorNavData* vectorNavData, CamVectorNavData* camVectorNavData,
                           LegControllerData<T>* legControllerData,
                           StateEstimate<T>* stateEstimate,
                           RobotControlParameters* parameters) {
     _data.cheaterState = cheaterState;
     _data.vectorNavData = vectorNavData;
+    _data.camVectorNavData = camVectorNavData;
     _data.legControllerData = legControllerData;
     _data.result = stateEstimate;
     _phase = Vec4<T>::Zero();

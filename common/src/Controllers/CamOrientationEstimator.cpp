@@ -46,13 +46,13 @@ void CheaterOrientationEstimator<T>::run() {
 template <typename T>
 void CamVectorNavOrientationEstimator<T>::run() {
   this->_stateEstimatorData.result->orientation[0] =
-      this->_stateEstimatorData.CamVectorNavData->w; //Please test assignment
+      this->_stateEstimatorData.camVectorNavData->rot_w; //Please test assignment
   this->_stateEstimatorData.result->orientation[1] =
-      this->_stateEstimatorData.camVectorNavData->x;
+      this->_stateEstimatorData.camVectorNavData->rot_x;
   this->_stateEstimatorData.result->orientation[2] =
-      this->_stateEstimatorData.camVectorNavData->y;
+      this->_stateEstimatorData.camVectorNavData->rot_y;
   this->_stateEstimatorData.result->orientation[3] =
-      this->_stateEstimatorData.camVectorNavData->z;
+      this->_stateEstimatorData.camVectorNavData->rot_z;
 
   if(_b_first_visit){
     Vec3<T> rpy_ini = ori::quatToRPY(this->_stateEstimatorData.result->orientation);

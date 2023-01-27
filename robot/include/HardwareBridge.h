@@ -17,6 +17,7 @@
 #include <string>
 #include <lcm-cpp.hpp>
 #include <lord_imu/LordImu.h>
+#include <tracking_cam/TCam.h>
 
 #include "RobotRunner.h"
 #include "Utilities/PeriodicTask.h"
@@ -132,19 +133,20 @@ class BiQuHardwareBridge : public HardwareBridge {
   void runSpi();
   void initHardware();
   void run();
-  void runMicrostrain();
-  void logMicrostrain();
+  void runTCam();
+  void logTCam(); //TODO
   void abort(const std::string& reason);
   void abort(const char* reason);
 
  private:
   CamVectorNavData _camVectorNavData;
   lcm::LCM _spiLcm;
-  lcm::LCM _microstrainLcm;
-  std::thread _microstrainThread;
+  lcm::LCM _microstrainLcm; //TODO
+  std::thread _poseThread;//TODO
   // LordImu _microstrainImu;
-  microstrain_lcmt _microstrainData;
-  bool _microstrainInit = false;
+  TCam _tCam;
+  microstrain_lcmt _microstrainData; //TODO
+  bool _tCamInit = false; //TODO
   bool _load_parameters_from_file;
 };
 
