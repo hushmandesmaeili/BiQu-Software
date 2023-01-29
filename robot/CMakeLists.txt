@@ -8,6 +8,7 @@ include_directories("../third-party/ParamHandler")
 include_directories("../third-party/vectornav/include")
 include_directories("../third-party/vectornav/include/vn")
 include_directories("../third-party/lord_imu/Include")
+include_directories("../third-party/tracking_cam") 
 
 include_directories("../lcm-types/cpp")
 include_directories("/usr/local/include/lcm/")   # lcm includes
@@ -20,7 +21,8 @@ file(GLOB sources "src/*.cpp" "src/rt/*.c"  "src/rt/*.cpp")
 
 add_library(robot SHARED ${sources})
 
-target_link_libraries(robot biomimetics pthread lcm inih dynacore_param_handler lord_imu soem)
+set(DEPENDENCIES realsense2) #BiQu
+target_link_libraries(robot biomimetics pthread lcm inih dynacore_param_handler lord_imu soem tracking_cam ${DEPENDENCIES}) #dependencies is for BiQU
 if(CMAKE_SYSTEM_NAME MATCHES Linux)
 target_link_libraries(robot libvnc rt)
 endif()

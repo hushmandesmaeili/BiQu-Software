@@ -18,7 +18,7 @@
 #include <asm/termbits.h>
 #undef termios
 
-#include <termios.h>
+// #include <termios.h>
 #include <math.h>
 #include <pthread.h>
 #include <sys/ioctl.h>
