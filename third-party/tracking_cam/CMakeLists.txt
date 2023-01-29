@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.1.0)
-##project(t_cam)
+include_directories("../../common/include/")
 set(DEPENDENCIES realsense2)
 add_library(tracking_cam SHARED
     TCam.cpp)

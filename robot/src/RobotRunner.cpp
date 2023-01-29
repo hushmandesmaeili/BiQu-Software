@@ -16,6 +16,10 @@
 #include "ParamHandler.hpp"
 #include "Utilities/Timer.h"
 #include "Controllers/PositionVelocityEstimator.h"
+#include "Controllers/CamPositionVelocityEstimator.h"
+#include "Controllers/CamOrientationEstimator.h"
+
+
 //#include "rt/rt_interface_lcm.h"
 
 RobotRunner::RobotRunner(RobotController* robot_ctrl, 
@@ -50,7 +54,7 @@ void RobotRunner::init() {
   _stateEstimator = new StateEstimatorContainer<float>(
       cheaterState, vectorNavData,camVectorNavData, _legController->datas,
       &_stateEstimate, controlParameters);
-  initializeStateEstimator(false);
+  initializeStateEstimator(false,true);
 
   memset(&rc_control, 0, sizeof(rc_control_settings));
   // Initialize the DesiredStateCommand object
@@ -219,7 +223,8 @@ void RobotRunner::finalizeStep() {
 
 /*!
  * Reset the state estimator in the given mode.
- * @param cheaterMode, biQu
+ * @param cheaterMode
+ * @param biQu
  */
 void RobotRunner::initializeStateEstimator(bool cheaterMode, bool biQu) {
   _stateEstimator->removeAllEstimators();
@@ -230,10 +235,11 @@ void RobotRunner::initializeStateEstimator(bool cheaterMode, bool biQu) {
   if (cheaterMode) {
     _stateEstimator->addEstimator<CheaterOrientationEstimator<float>>();
     _stateEstimator->addEstimator<CheaterPositionVelocityEstimator<float>>();
+    
   } 
   else if(biQu){
-  _stateEstimator->addEstimator<VectorNavOrientationEstimator<float>>();
-  _stateEstimator->addEstimator<LinearKFPositionVelocityEstimator<float>>();
+  _stateEstimator->addEstimator<CamVectorNavOrientationEstimator<float>>();
+  _stateEstimator->addEstimator<CamLinearKFPositionVelocityEstimator<float>>();
   }
   else {
     _stateEstimator->addEstimator<VectorNavOrientationEstimator<float>>();

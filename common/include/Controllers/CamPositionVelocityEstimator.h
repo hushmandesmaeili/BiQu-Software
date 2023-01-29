@@ -7,8 +7,8 @@
  *  - foot positions/velocities in body/world frame
  */
 
-#ifndef PROJECT_POSITIONVELOCITYESTIMATOR_H
-#define PROJECT_POSITIONVELOCITYESTIMATOR_H
+#ifndef PROJECT_CAMPOSITIONVELOCITYESTIMATOR_H
+#define PROJECT_CAMPOSITIONVELOCITYESTIMATOR_H
 
 #include "Controllers/StateEstimatorContainer.h"
 
@@ -25,15 +25,4 @@ class CamLinearKFPositionVelocityEstimator : public GenericEstimator<T> {
   virtual void setup();  
 };
 
-/*!
- * "Cheater" position and velocity estimator which will return the correct position and
- * velocity when running in simulation.
- */
-template<typename T>
-class CheaterPositionVelocityEstimator : public GenericEstimator<T> {
-public:
-  virtual void run();
-  virtual void setup() {}
-};
-
-#endif  // PROJECT_POSITIONVELOCITYESTIMATOR_H
+ #endif  // PROJECT_POSITIONVELOCITYESTIMATOR_H

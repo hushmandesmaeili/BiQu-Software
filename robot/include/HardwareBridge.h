@@ -9,7 +9,7 @@
 #ifndef PROJECT_HARDWAREBRIDGE_H
 #define PROJECT_HARDWAREBRIDGE_H
 
-#ifdef linux 
+#ifdef __linux__
 
 #define MAX_STACK_SIZE 16384  // 16KB  of stack
 #define TASK_PRIORITY 49      // linux priority, this is not the nice value

@@ -5,7 +5,7 @@
  * This class initializes the hardware of both robots and allows the robot
  * controller to access it
  */
-#ifdef linux 
+#ifdef __linux__
 
 #include <sys/mman.h>
 #include <unistd.h>
@@ -22,6 +22,7 @@
 #include "Utilities/Utilities_print.h"
 
 #define USE_MICROSTRAIN
+#define USE_TCAM
 
 /*!
  * If an error occurs during initialization, before motors are enabled, print
@@ -715,34 +716,21 @@ void BiQuHardwareBridge::initHardware() {
 }
 
 void BiQuHardwareBridge::runTCam() {
-  while(true) {
+  if(_tCamInit){
+    while(true) {
     _tCam.get_pose();
 
-#ifdef USE_MICROSTRAIN
-    _camVectorNavData.x= _tCam.pose.x;
-    _camVectorNavData.y= _tCam.pose.y;
-    _camVectorNavData.z= _tCam.pose.z;
-
-    _camVectorNavData.acc_x = _tCam.pose.acc_x;
-    _camVectorNavData.acc_y = _tCam.pose.acc_y;
-    _camVectorNavData.acc_z = _tCam.pose.acc_z;
-
-    _camVectorNavData.ang_vel_x = _tCam.pose.ang_vel_x;
-    _camVectorNavData.ang_vel_y = _tCam.pose.ang_vel_y;
-    _camVectorNavData.ang_vel_z = _tCam.pose.ang_vel_z;
-
-    _camVectorNavData.vel_x = _tCam.pose.vel_x;
-    _camVectorNavData.vel_y = _tCam.pose.vel_y;
-    _camVectorNavData.vel_z = _tCam.pose.vel_z;
-
-    _camVectorNavData.rot_w = _tCam.pose.rot_w;
-    _camVectorNavData.rot_x = _tCam.pose.rot_x;
-    _camVectorNavData.rot_y = _tCam.pose.rot_y;
-    _camVectorNavData.rot_z = _tCam.pose.rot_z;
-
-#endif
+    #ifdef USE_TCAM
+      _camVectorNavData.position = _tCam.pose.position;
+      _camVectorNavData.quat = _tCam.pose.quat;
+      _camVectorNavData.velocity = _tCam.pose.velocity;
+      _camVectorNavData.omega = _tCam.pose.omega;
+      _camVectorNavData.ang_acc = _tCam.pose.ang_acc;
+    #endif
+    }
+  
   }
 
 
 }
-#endif
+ #endif
