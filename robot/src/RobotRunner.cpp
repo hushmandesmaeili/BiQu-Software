@@ -54,7 +54,7 @@ void RobotRunner::init() {
   _stateEstimator = new StateEstimatorContainer<float>(
       cheaterState, vectorNavData,camVectorNavData, _legController->datas,
       &_stateEstimate, controlParameters);
-  initializeStateEstimator(false,true);
+  initializeStateEstimator(false,false);
 
   memset(&rc_control, 0, sizeof(rc_control_settings));
   // Initialize the DesiredStateCommand object
@@ -184,7 +184,7 @@ void RobotRunner::setupStep() {
   // check transition to cheater mode:
   if (!_cheaterModeEnabled && controlParameters->cheater_mode) {
     printf("[RobotRunner] Transitioning to Cheater Mode...\n");
-    initializeStateEstimator(true);
+    initializeStateEstimator(true, false);
     // todo any configuration
     _cheaterModeEnabled = true;
   }
@@ -192,7 +192,7 @@ void RobotRunner::setupStep() {
   // check transition from cheater mode:
   if (_cheaterModeEnabled && !controlParameters->cheater_mode) {
     printf("[RobotRunner] Transitioning from Cheater Mode...\n");
-    initializeStateEstimator(false);
+    initializeStateEstimator(false,false);
     // todo any configuration
     _cheaterModeEnabled = false;
   }
