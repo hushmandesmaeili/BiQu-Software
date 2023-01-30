@@ -25,6 +25,7 @@
 #include "control_parameter_respones_lcmt.hpp"
 #include "gamepad_lcmt.hpp"
 #include "microstrain_lcmt.hpp"
+#include "tCam_lcmt.hpp"
 #include "ecat_command_t.hpp"
 #include "ecat_data_t.hpp"
 
@@ -141,11 +142,11 @@ class BiQuHardwareBridge : public HardwareBridge {
  private:
   CamVectorNavData _camVectorNavData;
   lcm::LCM _spiLcm;
-  lcm::LCM _microstrainLcm; //TODO
+  lcm::LCM _tCamLcm; //TODO
   std::thread _poseThread;//TODO
   // LordImu _microstrainImu;
   TCam _tCam;
-  microstrain_lcmt _microstrainData; //TODO
+  tCam_lcmt _tCamData; //TODO
   bool _tCamInit = false; //TODO
   bool _load_parameters_from_file;
 };

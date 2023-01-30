@@ -594,7 +594,7 @@ void Cheetah3HardwareBridge::run() {
 * BiQuHardwareBridge constructor
 */
 BiQuHardwareBridge::BiQuHardwareBridge(RobotController* robot_ctrl, bool load_parameters_from_file)
-    : HardwareBridge(robot_ctrl), _spiLcm(getLcmUrl(255)), _microstrainLcm(getLcmUrl(255)) {
+    : HardwareBridge(robot_ctrl), _spiLcm(getLcmUrl(255)), _tCamLcm(getLcmUrl(255)) {
   _load_parameters_from_file = load_parameters_from_file;
 }
 
@@ -730,7 +730,10 @@ void BiQuHardwareBridge::runTCam() {
     }
   
   }
+}
 
-
+void BiQuHardwareBridge::logTCam() {
+  _tCam.updateLCM(&_tCamData);
+  _tCamLcm.publish("tCam", &_tCamData);
 }
  #endif

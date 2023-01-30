@@ -1,0 +1,9 @@
+struct tCam_lcmt {
+  float position[3];
+  float velocity[3];
+  float acceleration[3];
+  float quat[4];
+  float omega[3];
+  float ang_acc[3];
+  float rpy[3];
+}
