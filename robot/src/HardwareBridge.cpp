@@ -721,7 +721,7 @@ void BiQuHardwareBridge::initHardware() {
 //   }
 // #endif
 
-  // init_spi();
+  init_spi_biqu();
   // _microstrainInit = _microstrainImu.tryInit(0, 921600);
 }
 
@@ -729,15 +729,15 @@ void BiQuHardwareBridge::initHardware() {
  * Run BiQu SPI
  */
 void BiQuHardwareBridge::runSpi() {
-  // spi_command_t* cmd = get_spi_command();
-  // spi_data_t* data = get_spi_data();
+  spi_command_t* cmd = get_spi_command();
+  spi_data_t* data = get_spi_data();
 
-  // memcpy(cmd, &_spiCommand, sizeof(spi_command_t));
-  // spi_driver_run();
-  // memcpy(&_spiData, data, sizeof(spi_data_t));
+  memcpy(cmd, &_spiCommand, sizeof(spi_command_t));
+  spi_biqu_driver_run();
+  memcpy(&_spiData, data, sizeof(spi_data_t));
 
-  // _spiLcm.publish("spi_data", data);
-  // _spiLcm.publish("spi_command", cmd);
+  _spiLcm.publish("spi_data", data);
+  _spiLcm.publish("spi_command", cmd);
 }
 
 #endif
