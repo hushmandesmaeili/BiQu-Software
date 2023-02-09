@@ -1,7 +1,7 @@
 /*! @file LegController.cpp
  *  @brief Common Leg Control Interface
  *
- *  Implements low-level leg control for Mini Cheetah and Cheetah 3 Robots
+ *  Implements low-level leg control for BiQu, Mini Cheetah, and Cheetah 3 Robots
  *  Abstracts away the difference between the SPIne and the TI Boards
  *  All quantities are in the "leg frame" which has the same orientation as the
  * body frame, but is shifted so that 0,0,0 is at the ab/ad pivot (the "hip
@@ -68,7 +68,14 @@ void LegController<T>::edampCommand(RobotType robot, T gain) {
         commands[leg].kdCartesian(axis, axis) = gain;
       }
     }
-  } else {  // mini-cheetah
+  } else if (robot == RobotType::MINI_CHEETAH) {  // mini-cheetah
+    for (int leg = 0; leg < 4; leg++) {
+      for (int axis = 0; axis < 3; axis++) {
+        commands[leg].kdJoint(axis, axis) = gain;
+      }
+    }
+  } 
+  else if (robot == RobotType::BIQU) {  // todo see if this is right
     for (int leg = 0; leg < 4; leg++) {
       for (int axis = 0; axis < 3; axis++) {
         commands[leg].kdJoint(axis, axis) = gain;

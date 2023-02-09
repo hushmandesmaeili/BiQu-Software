@@ -135,7 +135,11 @@ bool SafetyChecker<T>::checkForceFeedForward() {
   } else if (data->_quadruped->_robotType == RobotType::MINI_CHEETAH) {
     maxLateralForce = 350;
     maxVerticalForce = 350;
-  }
+  } 
+  else if (data->_quadruped->_robotType == RobotType::BIQU) { // todo change to our max force
+    maxLateralForce = 350;
+    maxVerticalForce = 350;
+  } 
 
   // Check all of the legs
   for (int leg = 0; leg < 4; leg++) {

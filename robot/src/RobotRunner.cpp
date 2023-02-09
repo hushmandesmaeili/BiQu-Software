@@ -2,7 +2,7 @@
  * @file RobotRunner.cpp
  * @brief Common framework for running robot controllers.
  * This code is a common interface between control code and hardware/simulation
- * for mini cheetah and cheetah 3
+ * for biqu, mini cheetah, and cheetah 3
  */
 
 #include <unistd.h>
@@ -12,6 +12,7 @@
 #include "Controllers/OrientationEstimator.h"
 #include "Dynamics/Cheetah3.h"
 #include "Dynamics/MiniCheetah.h"
+#include "Dynamics/BiQu.h"
 #include "Utilities/Utilities_print.h"
 #include "ParamHandler.hpp"
 #include "Utilities/Timer.h"
@@ -37,6 +38,8 @@ void RobotRunner::init() {
   // Build the appropriate Quadruped object
   if (robotType == RobotType::MINI_CHEETAH) {
     _quadruped = buildMiniCheetah<float>();
+  } else if (robotType == RobotType::BIQU){
+    _quadruped = buildBiQu<float>();
   } else {
     _quadruped = buildCheetah3<float>();
   }
@@ -117,6 +120,9 @@ void RobotRunner::run() {
         if (robotType == RobotType::MINI_CHEETAH) {
           kpMat << 5, 0, 0, 0, 5, 0, 0, 0, 5;
           kdMat << 0.1, 0, 0, 0, 0.1, 0, 0, 0, 0.1;
+        } else if (robotType == RobotType::BIQU) { // todo tune our gains
+          kpMat << 1, 0, 0, 0, 1, 0, 0, 0, 1;
+          kdMat << 0.05, 0, 0, 0, 0.05, 0, 0, 0, 0.05;
         } else if (robotType == RobotType::CHEETAH_3) {
           kpMat << 50, 0, 0, 0, 50, 0, 0, 0, 50;
           kdMat << 1, 0, 0, 0, 1, 0, 0, 0, 1;
@@ -165,6 +171,8 @@ void RobotRunner::setupStep() {
   // Update the leg data
   if (robotType == RobotType::MINI_CHEETAH) {
     _legController->updateData(spiData);
+  } else if (robotType == RobotType::BIQU) {
+    _legController->updateData(spiData); // todo add our leg control
   } else if (robotType == RobotType::CHEETAH_3) {
     _legController->updateData(tiBoardData);
   } else {
@@ -204,6 +212,8 @@ void RobotRunner::setupStep() {
 void RobotRunner::finalizeStep() {
   if (robotType == RobotType::MINI_CHEETAH) {
     _legController->updateCommand(spiCommand);
+  }  else if (robotType == RobotType::BIQU) {
+    _legController->updateCommand(spiCommand); // todo add our leg control
   } else if (robotType == RobotType::CHEETAH_3) {
     _legController->updateCommand(tiBoardCommand);
   } else {

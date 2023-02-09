@@ -13,6 +13,7 @@
 
 #define SIMULATOR_DEFAULT_PARAMETERS "/simulator-defaults.yaml"
 #define MINI_CHEETAH_DEFAULT_PARAMETERS "/mini-cheetah-defaults.yaml"
+#define BIQU_DEFAULT_PARAMETERS "/biqu-defaults.yaml"
 #define CHEETAH_3_DEFAULT_PARAMETERS "/cheetah-3-defaults.yaml"
 
 /*!

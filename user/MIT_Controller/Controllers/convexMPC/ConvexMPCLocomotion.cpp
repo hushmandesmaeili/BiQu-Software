@@ -73,6 +73,8 @@ void ConvexMPCLocomotion::recompute_timing(int iterations_per_mpc) {
 void ConvexMPCLocomotion::_SetupCommand(ControlFSMData<float> & data){
   if(data._quadruped->_robotType == RobotType::MINI_CHEETAH){
     _body_height = 0.29;
+  } else if(data._quadruped->_robotType == RobotType::BIQU){
+    _body_height = 0.25;
   }else if(data._quadruped->_robotType == RobotType::CHEETAH_3){
     _body_height = 0.45;
   }else{
@@ -175,7 +177,10 @@ void ConvexMPCLocomotion::run(ControlFSMData<float>& data) {
   }
 
   if(_body_height < 0.02) {
-    _body_height = 0.29;
+    if(data._quadruped->_robotType == RobotType::BIQU)
+      _body_height = 0.25;
+    else
+      _body_height = 0.29;
   }
 
   // integrate position setpoint

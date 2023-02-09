@@ -3,7 +3,7 @@
  *
  *  This file contains the Quadruped class.  This stores all the parameters for
  * a quadruped robot.  There are utility functions to generate Quadruped objects
- * for Cheetah 3 (and eventually mini-cheetah). There is a buildModel() method
+ * for Cheetah 3 (and eventually mini-cheetah and biqu). There is a buildModel() method
  * which can be used to create a floating-base dynamics model of the quadruped.
  */
 

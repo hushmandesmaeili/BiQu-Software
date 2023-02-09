@@ -14,7 +14,7 @@
 
 /*!
  * Position and velocity estimator based on a Kalman Filter.
- * This is the algorithm used in Mini Cheetah and Cheetah 3.
+ * This is the algorithm used in BiQu, Mini Cheetah, and Cheetah 3.
  */
 template <typename T>
 class LinearKFPositionVelocityEstimator : public GenericEstimator<T> {

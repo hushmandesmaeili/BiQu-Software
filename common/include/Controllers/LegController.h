@@ -1,7 +1,7 @@
 /*! @file LegController.h
  *  @brief Common Leg Control Interface and Leg Control Algorithms
  *
- *  Implements low-level leg control for Mini Cheetah and Cheetah 3 Robots
+ *  Implements low-level leg control for BiQu, Mini Cheetah, and Cheetah 3 Robots
  *  Abstracts away the difference between the SPIne and the TI Boards (the low level leg control boards)
  *  All quantities are in the "leg frame" which has the same orientation as the
  * body frame, but is shifted so that 0,0,0 is at the ab/ad pivot (the "hip
@@ -51,7 +51,7 @@ struct LegControllerData {
 };
 
 /*!
- * Controller for 4 legs of a quadruped.  Works for both Mini Cheetah and Cheetah 3
+ * Controller for 4 legs of a quadruped.  Works for BiQu, Mini Cheetah, and Cheetah 3
  */
 template <typename T>
 class LegController {

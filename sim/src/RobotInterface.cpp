@@ -2,6 +2,7 @@
 #include <ControlParameters/ControlParameterInterface.h>
 #include <Dynamics/Cheetah3.h>
 #include <Dynamics/MiniCheetah.h>
+#include <Dynamics/BiQu.h>
 #include <unistd.h>
 #include "ControlParameters/SimulatorParameters.h"
 
@@ -17,6 +18,9 @@ RobotInterface::RobotInterface(RobotType robotType, Graphics3D *gfx,
   if (_robotType == RobotType::MINI_CHEETAH) {
     _controlParameters.initializeFromYamlFile(getConfigDirectoryPath() +
                                               MINI_CHEETAH_DEFAULT_PARAMETERS);
+  } else if (_robotType == RobotType::BIQU) {
+    _controlParameters.initializeFromYamlFile(getConfigDirectoryPath() +
+                                              BIQU_DEFAULT_PARAMETERS);
   } else if (_robotType == RobotType::CHEETAH_3) {
     _controlParameters.initializeFromYamlFile(getConfigDirectoryPath() +
                                               CHEETAH_3_DEFAULT_PARAMETERS);
@@ -33,7 +37,10 @@ RobotInterface::RobotInterface(RobotType robotType, Graphics3D *gfx,
   printf("[RobotInterface] Init graphics\n");
   Vec4<float> robotColor;
   robotColor << 0.6, 0.2, 0.2, 1.0;
-  _robotID = _robotType == RobotType::MINI_CHEETAH ? gfx->setupMiniCheetah(robotColor, true, false)
+  // _robotID = _robotType == RobotType::MINI_CHEETAH ? gfx->setupMiniCheetah(robotColor, true, false)
+  //                                                  : gfx->setupCheetah3(robotColor, true, false);
+  _robotID = (_robotType == RobotType::MINI_CHEETAH || _robotType == RobotType::BIQU) ?
+             (_robotType == RobotType::BIQU ? gfx->setupBiQu(robotColor, true, false) : gfx->setupMiniCheetah(robotColor, true, false))
                                                    : gfx->setupCheetah3(robotColor, true, false);
   printf("draw list has %lu items\n", _gfx->_drawList._kinematicXform.size());
   _gfx->_drawList._visualizationData = &_visualizationData;
@@ -48,7 +55,10 @@ RobotInterface::RobotInterface(RobotType robotType, Graphics3D *gfx,
                  &RobotInterface::handleVisualizationData, this);
 
   printf("[RobotInterface] Init dynamics\n");
-  _quadruped = robotType == RobotType::MINI_CHEETAH ? buildMiniCheetah<double>()
+  // _quadruped = robotType == RobotType::MINI_CHEETAH ? buildMiniCheetah<double>()
+  //                                                   : buildCheetah3<double>();
+  _quadruped = (robotType == RobotType::MINI_CHEETAH || robotType == RobotType::BIQU) ?
+               (robotType == RobotType::BIQU ? buildBiQu<double>() : buildMiniCheetah<double>())
                                                     : buildCheetah3<double>();
   _model = _quadruped.buildModel();
   _simulator = new DynamicsSimulator<double>(_model, false);

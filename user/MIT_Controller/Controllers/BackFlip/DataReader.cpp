@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 DataReader::DataReader(const RobotType& type, FSM_StateName stateNameIn) : _type(type) {
-  if (_type == RobotType::MINI_CHEETAH) {
+  if (_type == RobotType::MINI_CHEETAH || _type == RobotType::BIQU) {
     
     if (stateNameIn == FSM_StateName::BACKFLIP) {
       //load_control_plan(THIS_COM "user/WBC_Controller/WBC_States/BackFlip/data/mc_flip.dat");

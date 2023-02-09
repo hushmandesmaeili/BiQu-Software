@@ -8,6 +8,7 @@
 #include "Dynamics/DynamicsSimulator.h"
 #include "Dynamics/FloatingBaseModel.h"
 #include "Dynamics/MiniCheetah.h"
+#include "Dynamics/BiQu.h"
 #include "Dynamics/Quadruped.h"
 #include "Graphics3D.h"
 #include "SimControlPanel.h"

@@ -44,8 +44,11 @@ Simulation::Simulation(RobotType robot, Graphics3D* window,
   // init quadruped info
   printf("[Simulation] Build quadruped...\n");
   _robot = robot;
-  _quadruped = _robot == RobotType::MINI_CHEETAH ? buildMiniCheetah<double>()
-                                                 : buildCheetah3<double>();
+  // _quadruped = _robot == RobotType::MINI_CHEETAH ? buildMiniCheetah<double>()
+  //                                                : buildCheetah3<double>();
+  _quadruped = ((_robot == RobotType::MINI_CHEETAH || _robot == RobotType::BIQU) ?
+               (_robot == RobotType::BIQU ? buildBiQu<double>() : buildMiniCheetah<double>())
+                                                 : buildCheetah3<double>());
   printf("[Simulation] Build actuator model...\n");
   _actuatorModels = _quadruped.buildActuatorModels();
   _window = window;
@@ -56,11 +59,17 @@ Simulation::Simulation(RobotType robot, Graphics3D* window,
     Vec4<float> truthColor, seColor;
     truthColor << 0.2, 0.4, 0.2, 0.6;
     seColor << .75,.75,.75, 1.0;
-    _simRobotID = _robot == RobotType::MINI_CHEETAH ? window->setupMiniCheetah(truthColor, true, true)
-                                                    : window->setupCheetah3(truthColor, true, true);
-    _controllerRobotID = _robot == RobotType::MINI_CHEETAH
-                             ? window->setupMiniCheetah(seColor, false, false)
-                             : window->setupCheetah3(seColor, false, false);
+    // _simRobotID = _robot == RobotType::MINI_CHEETAH ? window->setupMiniCheetah(truthColor, true, true)
+    //                                                 : window->setupCheetah3(truthColor, true, true);
+    // _controllerRobotID = _robot == RobotType::MINI_CHEETAH
+    //                          ? window->setupMiniCheetah(seColor, false, false)
+    //                          : window->setupCheetah3(seColor, false, false);
+    _simRobotID = ((_robot == RobotType::MINI_CHEETAH || _robot == RobotType::BIQU) ? 
+                   (_robot == RobotType::BIQU ? window->setupBiQu(truthColor, true, true) : window->setupMiniCheetah(truthColor, true, true))
+                                                    : window->setupCheetah3(truthColor, true, true));
+    _controllerRobotID = ((_robot == RobotType::MINI_CHEETAH || _robot == RobotType::BIQU) ?
+                          (_robot == RobotType::BIQU ? window->setupBiQu(seColor, false, false) :  window->setupMiniCheetah(seColor, false, false))
+                             : window->setupCheetah3(seColor, false, false));
   }
 
   // init rigid body dynamics
@@ -163,6 +172,15 @@ Simulation::Simulation(RobotType robot, Graphics3D* window,
       _spineBoards[leg].resetData();
       _spineBoards[leg].resetCommand();
     }
+  } else if (_robot == RobotType::BIQU) { // todo replace with our stuff
+  // init spine:
+    for (int leg = 0; leg < 4; leg++) {
+      _spineBoards[leg].init(Quadruped<float>::getSideSign(leg), leg); 
+      _spineBoards[leg].data = &_spiData;
+      _spineBoards[leg].cmd = &_spiCommand;
+      _spineBoards[leg].resetData();
+      _spineBoards[leg].resetCommand();
+    }
   } else if (_robot == RobotType::CHEETAH_3) {
     // init ti board
     for (int leg = 0; leg < 4; leg++) {
@@ -193,6 +211,9 @@ Simulation::Simulation(RobotType robot, Graphics3D* window,
   if (_robot == RobotType::MINI_CHEETAH) {
     _robotParams.initializeFromYamlFile(getConfigDirectoryPath() +
                                         MINI_CHEETAH_DEFAULT_PARAMETERS);
+   } else if (_robot == RobotType::BIQU) {
+    _robotParams.initializeFromYamlFile(getConfigDirectoryPath() +
+                                        BIQU_DEFAULT_PARAMETERS);
   } else if (_robot == RobotType::CHEETAH_3) {
     _robotParams.initializeFromYamlFile(getConfigDirectoryPath() +
                                         CHEETAH_3_DEFAULT_PARAMETERS);
@@ -346,6 +367,14 @@ void Simulation::step(double dt, double dtLowLevelControl,
             _simulator->getState().qd[leg * 3 + joint]);
       }
     }
+  } else if (_robot == RobotType::BIQU) {
+    for (int leg = 0; leg < 4; leg++) {
+      for (int joint = 0; joint < 3; joint++) {
+        _tau[leg * 3 + joint] = _actuatorModels[joint].getTorque(
+            _spineBoards[leg].torque_out[joint],
+            _simulator->getState().qd[leg * 3 + joint]);
+      }
+    }
   } else if (_robot == RobotType::CHEETAH_3) {
     for (int leg = 0; leg < 4; leg++) {
       for (int joint = 0; joint < 3; joint++) {
@@ -377,6 +406,23 @@ void Simulation::step(double dt, double dtLowLevelControl,
 
 void Simulation::lowLevelControl() {
   if (_robot == RobotType::MINI_CHEETAH) {
+    // update spine board data:
+    for (int leg = 0; leg < 4; leg++) {
+      _spiData.q_abad[leg] = _simulator->getState().q[leg * 3 + 0];
+      _spiData.q_hip[leg] = _simulator->getState().q[leg * 3 + 1];
+      _spiData.q_knee[leg] = _simulator->getState().q[leg * 3 + 2];
+
+      _spiData.qd_abad[leg] = _simulator->getState().qd[leg * 3 + 0];
+      _spiData.qd_hip[leg] = _simulator->getState().qd[leg * 3 + 1];
+      _spiData.qd_knee[leg] = _simulator->getState().qd[leg * 3 + 2];
+    }
+
+    // run spine board control:
+    for (auto& spineBoard : _spineBoards) {
+      spineBoard.run();
+    }
+
+  } else if (_robot == RobotType::BIQU) { // todo add anything specific to biqu
     // update spine board data:
     for (int leg = 0; leg < 4; leg++) {
       _spiData.q_abad[leg] = _simulator->getState().q[leg * 3 + 0];
@@ -434,6 +480,8 @@ void Simulation::highLevelControl() {
   // send leg data to robot
   if (_robot == RobotType::MINI_CHEETAH) {
     _sharedMemory().simToRobot.spiData = _spiData;
+  } else if (_robot == RobotType::BIQU) {
+    _sharedMemory().simToRobot.spiData = _spiData; // todo add anything specific to us
   } else if (_robot == RobotType::CHEETAH_3) {
     for (int i = 0; i < 4; i++) {
       _sharedMemory().simToRobot.tiBoardData[i] = *_tiBoards[i].data;
@@ -470,6 +518,12 @@ void Simulation::highLevelControl() {
   // update
   if (_robot == RobotType::MINI_CHEETAH) {
     _spiCommand = _sharedMemory().robotToSim.spiCommand;
+
+    // pretty_print(_spiCommand.q_des_abad, "q des abad", 4);
+    // pretty_print(_spiCommand.q_des_hip, "q des hip", 4);
+    // pretty_print(_spiCommand.q_des_knee, "q des knee", 4);
+  } else if (_robot == RobotType::BIQU) {
+    _spiCommand = _sharedMemory().robotToSim.spiCommand; // todo add anything specific to us
 
     // pretty_print(_spiCommand.q_des_abad, "q des abad", 4);
     // pretty_print(_spiCommand.q_des_hip, "q des hip", 4);

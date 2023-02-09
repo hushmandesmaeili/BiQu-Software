@@ -2,7 +2,7 @@
  * @file RobotRunner.h
  * @brief Common framework for running robot controllers.
  * This code is a common interface between control code and hardware/simulation
- * for mini cheetah and cheetah 3
+ * for biqu, mini cheetah, and cheetah 3
  */
 
 #ifndef PROJECT_ROBOTRUNNER_H

@@ -19,9 +19,9 @@ static float slider_map(int in) {
   return span * (float)(in) / 100.f - (span / 2);
 }
 
-static QString make_string(float v) {
+static QString make_string(float v, std::string s) {
   char buff[128];
-  sprintf(buff, "%0.3f", v);
+  sprintf(buff, "%0.3f\t%s", v, s.c_str());
   return QString(buff);
 }
 
@@ -156,37 +156,37 @@ bool MiniCheetahDebug::setDebugData(MiniCheetahDebugData &msg) {
     return false;
   }
 
-  ui->abad_1_pos->setText(make_string(msg.p[0][0]));
-  ui->hip_1_pos->setText(make_string(msg.p[0][1]));
-  ui->knee_1_pos->setText(make_string(msg.p[0][2]));
+  ui->abad_1_pos->setText(make_string(msg.p[0][0], "abad_1_pos"));
+  ui->hip_1_pos->setText(make_string(msg.p[0][1], "hip_1_pos"));
+  ui->knee_1_pos->setText(make_string(msg.p[0][2], "knee_1_pos"));
 
-  ui->abad_2_pos->setText(make_string(msg.p[1][0]));
-  ui->hip_2_pos->setText(make_string(msg.p[1][1]));
-  ui->knee_2_pos->setText(make_string(msg.p[1][2]));
+  ui->abad_2_pos->setText(make_string(msg.p[1][0], "abad_2_pos"));
+  ui->hip_2_pos->setText(make_string(msg.p[1][1], "hip_2_pos"));
+  ui->knee_2_pos->setText(make_string(msg.p[1][2], "knee_2_pos"));
 
-  ui->abad_3_pos->setText(make_string(msg.p[2][0]));
-  ui->hip_3_pos->setText(make_string(msg.p[2][1]));
-  ui->knee_3_pos->setText(make_string(msg.p[2][2]));
+  ui->abad_3_pos->setText(make_string(msg.p[2][0], "abad_3_pos"));
+  ui->hip_3_pos->setText(make_string(msg.p[2][1], "hip_3_pos"));
+  ui->knee_3_pos->setText(make_string(msg.p[2][2], "knee_3_pos"));
 
-  ui->abad_4_pos->setText(make_string(msg.p[3][0]));
-  ui->hip_4_pos->setText(make_string(msg.p[3][1]));
-  ui->knee_4_pos->setText(make_string(msg.p[3][2]));
+  ui->abad_4_pos->setText(make_string(msg.p[3][0], "abad_4_pos"));
+  ui->hip_4_pos->setText(make_string(msg.p[3][1], "hip_4_pos"));
+  ui->knee_4_pos->setText(make_string(msg.p[3][2], "knee_4_pos"));
 
-  ui->abad_1_vel->setText(make_string(msg.v[0][0]));
-  ui->hip_1_vel->setText(make_string(msg.v[0][1]));
-  ui->knee_1_vel->setText(make_string(msg.v[0][2]));
+  ui->abad_1_vel->setText(make_string(msg.v[0][0], "abad_1_vel"));
+  ui->hip_1_vel->setText(make_string(msg.v[0][1], "hip_1_vel"));
+  ui->knee_1_vel->setText(make_string(msg.v[0][2], "knee_1_vel"));
 
-  ui->abad_2_vel->setText(make_string(msg.v[1][0]));
-  ui->hip_2_vel->setText(make_string(msg.v[1][1]));
-  ui->knee_2_vel->setText(make_string(msg.v[1][2]));
+  ui->abad_2_vel->setText(make_string(msg.v[1][0], "abad_2_vel"));
+  ui->hip_2_vel->setText(make_string(msg.v[1][1], "hip_2_vel"));
+  ui->knee_2_vel->setText(make_string(msg.v[1][2], "knee_2_vel"));
 
-  ui->abad_3_vel->setText(make_string(msg.v[2][0]));
-  ui->hip_3_vel->setText(make_string(msg.v[2][1]));
-  ui->knee_3_vel->setText(make_string(msg.v[2][2]));
+  ui->abad_3_vel->setText(make_string(msg.v[2][0], "abad_3_vel"));
+  ui->hip_3_vel->setText(make_string(msg.v[2][1], "hip_3_vel"));
+  ui->knee_3_vel->setText(make_string(msg.v[2][2], "knee_3_vel"));
 
-  ui->abad_4_vel->setText(make_string(msg.v[3][0]));
-  ui->hip_4_vel->setText(make_string(msg.v[3][1]));
-  ui->knee_4_vel->setText(make_string(msg.v[3][2]));
+  ui->abad_4_vel->setText(make_string(msg.v[3][0], "abad_4_vel"));
+  ui->hip_4_vel->setText(make_string(msg.v[3][1], "hip_4_vel"));
+  ui->knee_4_vel->setText(make_string(msg.v[3][2], "knee_4_vel"));
 
   return true;
 }
