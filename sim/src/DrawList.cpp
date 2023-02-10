@@ -10,13 +10,14 @@
 void DrawList::loadFiles() {
   printf("[DrawList] Load object files...\n");
   std::vector<std::string> names = {
-      "c3_body.obj",         "mini_abad.obj",
-      "c3_upper_link.obj",   "c3_lower_link.obj",
-      "mini_body.obj",       "mini_abad.obj",
-      "mini_upper_link.obj", "mini_lower_link.obj",
-      "sphere.obj",          "cube.obj",
-      "biqu_body.obj",       "biqu_abad.obj",
-      "biqu_upper_link.obj", "biqu_lower_link.obj"};
+      "c3_body.obj",            "mini_abad.obj",
+      "c3_upper_link.obj",      "c3_lower_link.obj",
+      "mini_body.obj",          "mini_abad.obj",
+      "mini_upper_link.obj",    "mini_lower_link.obj",
+      "sphere.obj",             "cube.obj",
+      "biqu_body.obj",          "biqu_abad.obj",
+      "biqu_abad_adapter.obj",  "biqu_upper_link.obj", 
+      "biqu_lower_link.obj"};
   for (const auto& name : names) {
     std::string filename = _baseFileName + name;
     _vertexData.emplace_back();
@@ -321,19 +322,23 @@ size_t DrawList::addBiQu(Vec4<float> color, bool useOld, bool canHide) {
   _nTotal++;
 
   for (int i = 0; i < 4; i++) {
-    _objectMap.push_back(i0 + 1);
+    if (i == 1 || i == 2)
+      _objectMap.push_back(i0 + 1);
+    else
+      _objectMap.push_back(i0 + 2);
+
     _canBeHidden.push_back(canHide);
     _modelOffsets.push_back(abadOffsets[i]);
     _kinematicXform.push_back(eye);
     _instanceColor.push_back(abadColor);
 
-    _objectMap.push_back(i0 + 2);
+    _objectMap.push_back(i0 + 3);
     _canBeHidden.push_back(canHide);
     _modelOffsets.push_back(upperOffsets[i]);
     _kinematicXform.push_back(eye);
     _instanceColor.push_back(link1Color);
 
-    _objectMap.push_back(i0 + 3);
+    _objectMap.push_back(i0 + 4);
     _canBeHidden.push_back(canHide);
     _modelOffsets.push_back(lowerOffsets[i]);
     _kinematicXform.push_back(eye);
