@@ -8,8 +8,8 @@
 
 #include "Gait.h"
 
-//#define DRAW_DEBUG_SWINGS
-//#define DRAW_DEBUG_PATH
+#define DRAW_DEBUG_SWINGS
+#define DRAW_DEBUG_PATH
 
 
 ////////////////////
@@ -684,10 +684,10 @@ void ConvexMPCLocomotion::solveSparseMPC(int *mpcTable, ControlFSMData<float> &d
 
 void ConvexMPCLocomotion::initSparseMPC() {
   Mat3<double> baseInertia;
-  baseInertia << 0.07, 0, 0,
-              0, 0.26, 0,
-              0, 0, 0.242;
-  double mass = 9;
+  baseInertia << 3.09249e-2, -9.00101e-7, 1.865287e-5,
+                 -8.00101e-7, 5.106100e-2, 1.245813e-4,
+                 1.865287e-5, 1.245813e-4, 6.939757e-2;
+  double mass = 2.50000279f;
   double maxForce = 120;
 
   std::vector<double> dtTraj;

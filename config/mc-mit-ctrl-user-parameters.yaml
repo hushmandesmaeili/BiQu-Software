@@ -18,16 +18,16 @@ Kp_joint          : [3, 3, 3]
 #Kp_joint          : [15, 15, 15]
 
 Kp_body           : [100, 100, 100]
-Kd_body           : [10, 10, 10]
+Kd_body           : [20, 20, 20]
 
-Kp_foot           : [500, 500, 500]
-Kd_foot           : [10, 10, 10]
+Kp_foot           : [1000, 1000, 1000]
+Kd_foot           : [158, 158, 158]
 
 #Kp_foot           : [200, 200, 200]
 #Kd_foot           : [20, 20, 20]
 
 Kp_ori            : [100, 100, 100]
-Kd_ori            : [10, 10, 10]
+Kd_ori            : [20, 20, 20]
 
 cmpc_gait         : 9
 cmpc_x_drag       : 3
@@ -84,7 +84,7 @@ RPC_visualize_pred  : 1
 RPC_use_separate    : 1
 
 # Desired state commands
-des_p             : [0,0,0.26]
+des_p             : [0,0,0.25]
 des_theta         : [0,0,0]
 des_dp            : [0,0,0]
 des_dtheta        : [0,0,0]

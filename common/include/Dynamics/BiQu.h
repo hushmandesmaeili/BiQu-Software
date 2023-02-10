@@ -28,9 +28,9 @@ Quadruped<T> buildBiQu()
     biqu._abadGearRatio = 9;
     biqu._hipGearRatio = 9;
     biqu._kneeGearRatio = 9;
-    biqu._abadLinkLength = 0.014;
+    biqu._abadLinkLength = 0.01295;
     biqu._hipLinkLength = 0.160;
-    biqu._kneeLinkY_offset = 0.03745*2;
+    biqu._kneeLinkY_offset = 0.04745;
     biqu._kneeLinkLength = 0.1675;
     biqu._maxLegLength = 0.3275;
 
@@ -59,7 +59,7 @@ Quadruped<T> buildBiQu()
     // All inertias are taken at the CoM and expressed in the body coordinate system (as done in Jared's paper)
     Mat3<T> abadRotationalInertia;
     abadRotationalInertia << 1.429e-5, 4.46e-6, -1.3e-7, 4.46e-6, 2.8123e-4, -2.0e-8, -1.3e-7, -2.0e-8, 2.7434e-4;
-    Vec3<T> abadCOM(9.432889e-2, 1.48758e-3, 2.191e-5);
+    Vec3<T> abadCOM(-7.257111e-2, 1.48758e-3, 2.191e-5);
     SpatialInertia<T> abadInertia(8.96779e-2, abadCOM, abadRotationalInertia);
 
     Mat3<T> hipRotationalInertia;
@@ -93,8 +93,8 @@ Quadruped<T> buildBiQu()
 
     // locations
     biqu._abadRotorLocation = Vec3<T>(4.82e-2, -2.63e-2, 0);
-    biqu._abadLocation = Vec3<T>(4.595e-2, 8.749e-2, 0.0);
-    biqu._hipLocation = Vec3<T>(1.484e-1, biqu._abadLinkLength, 0.0);
+    biqu._abadLocation = Vec3<T>(2.1285e-1, 8.75e-2, 0.0);
+    biqu._hipLocation = Vec3<T>(-1.85e-2, biqu._abadLinkLength, 0.0);
     biqu._hipRotorLocation = Vec3<T>(3.46e-2, -5.7e-3, 0);
     biqu._kneeLocation = Vec3<T>(0.0, 0.0, -biqu._hipLinkLength);
     biqu._kneeRotorLocation = Vec3<T>(0, 1.88e-2, -4.62e-2);
