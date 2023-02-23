@@ -8,19 +8,14 @@
 #include <opencv2/video.hpp>
 #include <opencv2/videoio.hpp>
 #include <librealsense2/rs.hpp>
+#include "TCam.h"
 using namespace cv;
 using namespace std;
 #include <math.h>
 
 
 
-class personTracker{
-public:
-	float pose_x;
-	float pose_y;
-	float yaw;
-	float distance_from_object;
-}
+
 //This is drawing the bounding box and return coordinates of center of box
 
 int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_intr, personTracker tracker) {
@@ -74,7 +69,7 @@ int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_in
 		tracker.pose_x = point[0];
 		tracker.pose_y = point[2];
 		tracker.angle = angle;
-		tracker.distance_from_object = dist_to_center; 
+		tracker.distance_from_object = dist_to_center;
 
 
 
@@ -145,6 +140,7 @@ int main(int argc, char** argv)
 {
 
 	personTracker tracker;  // Create an object of MyClass
+
 
   // Access attributes and set values
 
