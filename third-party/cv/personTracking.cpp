@@ -17,6 +17,7 @@ using namespace std;
 
 
 //This is drawing the bounding box and return coordinates of center of box
+static std::mutex dataMutex;
 
 int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_intr, personTracker tracker) {
 
@@ -66,6 +67,9 @@ int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_in
     std::string text = "x and z " + std::to_string(point[0]) + " " + std::to_string(point[2]) + " angle " + std::to_string(angle) +
     " The camera is facing an object " + std::to_string(dist_to_center) + " meters away ";
 
+
+
+
 		tracker.pose_x = point[0];
 		tracker.pose_y = point[2];
 		tracker.angle = angle;
@@ -92,9 +96,7 @@ int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_in
 	return 0;
 }
 
- int getposedata(){
 
- }
  int detectAndDraw(const HOGDescriptor &hog, Mat &img, Rect *main_rect)
 {
     vector<Rect> found, found_filtered;
@@ -136,7 +138,7 @@ int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_in
 
 
 
-int main(int argc, char** argv)
+int personTracker::init()
 {
 
 	personTracker tracker;  // Create an object of MyClass

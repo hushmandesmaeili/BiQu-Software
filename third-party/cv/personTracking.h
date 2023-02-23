@@ -17,7 +17,7 @@ struct personPose{
 
 class personTracker{
 public:
-    bool init();
+    int init();
     void get_pose();
     personPose pose;
 
