@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 3.0)
+project( HistogramOfOrientedGradients )
+find_package( OpenCV REQUIRED )
+find_package(realsense2 2.29.0)
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+add_executable( HistogramOfOrientedGradients HistogramOfOrientedGradients.cpp )
+target_link_libraries( HistogramOfOrientedGradients ${OpenCV_LIBS} )
+target_link_libraries(HistogramOfOrientedGradients ${DEPENDENCIES} ${realsense2_LIBRARY})
