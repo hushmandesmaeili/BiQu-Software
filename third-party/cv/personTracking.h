@@ -7,7 +7,7 @@
 #include "cppTypes.h"
 
 
-struct personPose{
+struct Pose{
     float pose_x;
     float pose_y;
     float depth_to_person;
@@ -18,12 +18,9 @@ struct personPose{
 class personTracker{
 public:
     int init();
-    void get_pose();
     personPose pose;
 
 
-private:
-    rs2::pipeline p;
 };
 
 #endif
