@@ -678,9 +678,9 @@ void BiQuHardwareBridge::run() {
       &taskManager, .002, "spi", &BiQuHardwareBridge::runSpi, this);
   spiTask.start();
 
-  PeriodicMemberFunction<BiQuHardwareBridge> spiTask(
-      &taskManager, .002, "spi", &BiQuHardwareBridge::runSpi, this);
-  spiTask.start();
+  PeriodicMemberFunction<BiQuHardwareBridge> visionTask(
+      &taskManager, .002, "vision", &BiQuHardwareBridge::runVision, this);
+  visionTask.start();
 
   // microstrain
   // if(_microstrainInit)
@@ -742,6 +742,11 @@ void BiQuHardwareBridge::runSpi() {
 
   // _spiLcm.publish("spi_data", data);
   // _spiLcm.publish("spi_command", cmd);
+}
+
+void BiQuHardwareBridge::runVision() {
+  //
+  
 }
 
 // #endif
