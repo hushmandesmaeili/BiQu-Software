@@ -5,7 +5,7 @@
  * This class initializes the hardware of both robots and allows the robot
  * controller to access it
  */
-#ifdef linux 
+// #ifdef linux
 
 #include <sys/mman.h>
 #include <unistd.h>
@@ -678,6 +678,10 @@ void BiQuHardwareBridge::run() {
       &taskManager, .002, "spi", &BiQuHardwareBridge::runSpi, this);
   spiTask.start();
 
+  PeriodicMemberFunction<BiQuHardwareBridge> spiTask(
+      &taskManager, .002, "spi", &BiQuHardwareBridge::runSpi, this);
+  spiTask.start();
+
   // microstrain
   // if(_microstrainInit)
   //   _microstrainThread = std::thread(&MiniCheetahHardwareBridge::runMicrostrain, this);
@@ -740,4 +744,4 @@ void BiQuHardwareBridge::runSpi() {
   // _spiLcm.publish("spi_command", cmd);
 }
 
-#endif
+// #endif
