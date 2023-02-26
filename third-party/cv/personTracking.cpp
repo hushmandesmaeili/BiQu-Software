@@ -8,6 +8,7 @@
 #include <opencv2/video.hpp>
 #include <opencv2/videoio.hpp>
 #include <librealsense2/rs.hpp>
+#include "TCam.h"
 using namespace cv;
 using namespace std;
 #include <math.h>
@@ -17,7 +18,8 @@ using namespace std;
 
 //This is drawing the bounding box and return coordinates of center of box
 
-int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_intr) {
+
+int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_intr, personTracker tracker) {
 
 	// Create tracker, select region-of-interest (ROI) and initialize the tracker
 	cv::Ptr<cv::Tracker> tracker = TrackerKCF::create();
@@ -29,17 +31,10 @@ int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_in
 
 	// Loop through available frames
 	for (;;) {
-
-
-
     rs2::frameset frames = p.wait_for_frames();
     frames = align_to_depth.process(frames);
     auto colored_frame = frames.get_color_frame();
     rs2::depth_frame depth = frames.get_depth_frame();
-
-
-
-
 
       const int w = colored_frame.as<rs2::video_frame>().get_width();
       const int h = colored_frame.as<rs2::video_frame>().get_height();
@@ -72,41 +67,33 @@ int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_in
     std::string text = "x and z " + std::to_string(point[0]) + " " + std::to_string(point[2]) + " angle " + std::to_string(angle) +
     " The camera is facing an object " + std::to_string(dist_to_center) + " meters away ";
 
+		pose.pose_x = point[0];
+		pose.pose_y = point[2];
+		pose.angle = angle;
+		pose.distance_from_object = dist_to_center;
+
+
+
+
     putText(frame, text, Point(30,30),
     FONT_HERSHEY_COMPLEX_SMALL, 0.8, Scalar(200,200,250), 1);
     cout << "point x z " <<  point[0] << " " << point[2] << " angle "<< angle <<endl;
-
-
-
-    // Print the distance
-    //std::cout << " Depth width of frame " << width << " Depth height of frame" << height << endl  ;
-    //std::cout << "Color width of frame " << colored_frame.get_width() << " Color height of frame \n" << colored_frame.get_height() << endl;
 
     std::cout << "The camera is facing an object " << dist_to_center << " meters away \r" <<endl;
 
 
     cv::imshow("video feed", frame);
     waitKey(30);
-    //cout << " cv imshow error "<<endl;
-		// Display the frame
-		//cv::imshow("Video feed", frame);
 
-		// Write video frame to output
-		//output.write(frame);
 
-		// For breaking the loop
+	}
 
-	} // end while (video.read(frame))
 
-	//   // Release video capture and writer
-	// output.release();
-	// video.release();
-
-	// Destroy all windows
-	// cv::destroyAllWindows();
 
 	return 0;
 }
+
+
  int detectAndDraw(const HOGDescriptor &hog, Mat &img, Rect *main_rect)
 {
     vector<Rect> found, found_filtered;
@@ -148,8 +135,14 @@ int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_in
 
 
 
-int main(int argc, char** argv)
+int personTracker::init()
 {
+
+	personTracker tracker;  // Create an object of MyClass
+
+
+  // Access attributes and set values
+
 
     HOGDescriptor hog;
     hog.setSVMDetector(HOGDescriptor::getDefaultPeopleDetector());
@@ -217,14 +210,9 @@ int main(int argc, char** argv)
               break;
               //imshow("people detector", image);
           }
-}
+				}
 
-          MOSSE(frame,main_rect, p, depth_intr);
+          MOSSE(frame,main_rect, p, depth_intr, tracker);
 
-
-
-
-
-
-    return 0;
-}
+    	return 0;
+		}
