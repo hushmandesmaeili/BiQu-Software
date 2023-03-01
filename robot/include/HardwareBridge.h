@@ -9,7 +9,7 @@
 #ifndef PROJECT_HARDWAREBRIDGE_H
 #define PROJECT_HARDWAREBRIDGE_H
 
-#ifdef linux 
+// #ifdef _linux_ 
 
 #define MAX_STACK_SIZE 16384  // 16KB  of stack
 #define TASK_PRIORITY 49      // linux priority, this is not the nice value
@@ -17,6 +17,8 @@
 #include <string>
 #include <lcm-cpp.hpp>
 #include <lord_imu/LordImu.h>
+#include <cv/personTracking.h>
+#include <planner/planner.h>
 
 #include "RobotRunner.h"
 #include "Utilities/PeriodicTask.h"
@@ -28,6 +30,8 @@
 #include "ecat_data_t.hpp"
 
 
+/*Struct for data spit out by biqu vision package
+*/
 
 /*!
  * Interface between robot and hardware
@@ -143,6 +147,11 @@ class BiQuHardwareBridge : public HardwareBridge {
  private:
   VectorNavData _vectorNavData;
   lcm::LCM _spiLcm;
+  PersonTracking _tracker;
+  VisionData _visionData;
+  Planner _planner;
+  Rc_control_input _rc_control_input;
+
   // lcm::LCM _microstrainLcm;
   // std::thread _microstrainThread;
   // LordImu _microstrainImu;
@@ -151,5 +160,5 @@ class BiQuHardwareBridge : public HardwareBridge {
   bool _load_parameters_from_file;
 };
 
-#endif // END of #ifdef linux
+// #endif // END of #ifdef linux
 #endif  // PROJECT_HARDWAREBRIDGE_H

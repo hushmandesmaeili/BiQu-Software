@@ -11,14 +11,14 @@ struct Pose{
     float pose_x;
     float pose_y;
     float depth_to_person;
-    float angle;
+    float rpy[3];
   ;
 };
 
 class personTracker{
 public:
     int init();
-    personPose pose;
+    Pose pose;
 
 
 };

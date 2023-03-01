@@ -52,4 +52,5 @@ endif(CMAKE_SYSTEM_NAME MATCHES Linux)
 
 # Our libraries
 add_subdirectory(FootstepPlanner)
+add_subdirectory(planner)
 

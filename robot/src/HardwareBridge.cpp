@@ -348,7 +348,8 @@ void HardwareBridge::run_sbus() {
   if (_port > 0) {
     int x = receive_sbus(_port);
     if (x) {
-      sbus_packet_complete();
+      // sbus_packet_complete();
+      sbus_packet_complete(rc_control_input);
     }
   }
 }
@@ -682,6 +683,10 @@ void BiQuHardwareBridge::run() {
       &taskManager, .002, "vision", &BiQuHardwareBridge::runVision, this);
   visionTask.start();
 
+  PeriodicMemberFunction<BiQuHardwareBridge> PlannerTask(
+      &taskManager, .002, "planner", &BiQuHardwareBridge::runPlanner, this);
+  plannerTask.start();
+
   // microstrain
   // if(_microstrainInit)
   //   _microstrainThread = std::thread(&MiniCheetahHardwareBridge::runMicrostrain, this);
@@ -746,6 +751,17 @@ void BiQuHardwareBridge::runSpi() {
 
 void BiQuHardwareBridge::runVision() {
   //
+  _tracker.init();
+  _visionData.tracker_x = _tracker.pose.pose_x;
+  _visionData.tracker_y= _tracker.pose.pose_y;
+  _visionData.tracker_depth = _tracker.depth_to_person;
+  _visionData.tracker_rpy[0]= _tracker.rpy[0];
+  _visionData.tracker_rpy[1]= _tracker.rpy[1];
+  _visionData.tracker_rpy[2]= _tracker.rpy[2];
+}
+
+void BiQuHardwareBridge::runPlanner() {
+  _planner.tracker_to_rc_control(&rc_control_input, _visionData);
   
 }
 

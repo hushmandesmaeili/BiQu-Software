@@ -19,7 +19,7 @@ using namespace std;
 //This is drawing the bounding box and return coordinates of center of box
 
 
-int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_intr, personTracker tracker) {
+int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_intr) {
 
 	// Create tracker, select region-of-interest (ROI) and initialize the tracker
 	cv::Ptr<cv::Tracker> tracker = TrackerKCF::create();
@@ -69,7 +69,9 @@ int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_in
 
 		pose.pose_x = point[0];
 		pose.pose_y = point[2];
-		pose.angle = angle;
+    pose.rpy[0] = 0;
+    pose.rpy[1] = 0;
+		pose.rpy[2] = angle;
 		pose.distance_from_object = dist_to_center;
 
 
@@ -138,7 +140,7 @@ int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_in
 int personTracker::init()
 {
 
-	personTracker tracker;  // Create an object of MyClass
+	
 
 
   // Access attributes and set values
@@ -212,7 +214,7 @@ int personTracker::init()
           }
 				}
 
-          MOSSE(frame,main_rect, p, depth_intr, tracker);
+          MOSSE(frame,main_rect, p, depth_intr);
 
     	return 0;
 		}

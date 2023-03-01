@@ -180,7 +180,7 @@ void RobotRunner::setupStep() {
   // check transition to cheater mode:
   if (!_cheaterModeEnabled && controlParameters->cheater_mode) {
     printf("[RobotRunner] Transitioning to Cheater Mode...\n");
-    initializeStateEstimator(true);
+    initializeStateEstimator(true, false);
     // todo any configuration
     _cheaterModeEnabled = true;
   }
@@ -192,8 +192,11 @@ void RobotRunner::setupStep() {
     // todo any configuration
     _cheaterModeEnabled = false;
   }
-
+  // if rc controller nenabledabled
   get_rc_control_settings(&rc_control);
+  // if(RC_mode::PLANNER){
+  //   get_planner_rc_settings(&rc_control);
+  // }
 
   // todo safety checks, sanity checks, etc...
 }
@@ -220,8 +223,9 @@ void RobotRunner::finalizeStep() {
 /*!
  * Reset the state estimator in the given mode.
  * @param cheaterMode
+ * @param biQu
  */
-void RobotRunner::initializeStateEstimator(bool cheaterMode) {
+void RobotRunner::initializeStateEstimator(bool cheaterMode, bool biQu) {
   _stateEstimator->removeAllEstimators();
   _stateEstimator->addEstimator<ContactEstimator<float>>();
   Vec4<float> contactDefault;
