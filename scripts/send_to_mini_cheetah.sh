@@ -7,7 +7,6 @@ cd ${DIR}/../mc-build/
 rm -rf robot-software
 mkdir robot-software
 mkdir robot-software/build
-#cp common/test-common robot-software/build
 cp $1 robot-software/build
 find . -name \*.so* -exec cp {} ./robot-software/build \;
 cp ../scripts/run_mc* ./robot-software/build
@@ -17,15 +16,4 @@ cp ../scripts/config_network_lcm.sh ./robot-software
 cp -r ../robot robot-software
 cp -r ../config robot-software
 
-DATE=$(date +"%Y%m%d%H%M")
-#scp -r robot-software user@10.0.0.34:~/robot-software-$DATE/
-
-if [ -z "$2" ]
-then
-  echo "No mini-cheetah number specified, using old mini-cheetah address"
-  scp -r robot-software user@10.0.0.34:~/
-else
-  scp -r robot-software user@10.0.0.4$2:~/
-fi
-
-
+scp -r robot-software spotmicroai@130.215.121.237:~/ # todo set up a static ip on raspi

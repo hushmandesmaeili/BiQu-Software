@@ -40,7 +40,7 @@ void HardwareBridge::initError(const char* reason, bool printErrno) {
 }
 
 /*!
- * All hardware initialization steps that are common between Cheetah 3 and Mini Cheetah
+ * All hardware initialization steps that are common between BiQu, Cheetah 3, and Mini Cheetah
  */
 void HardwareBridge::initCommon() {
   printf("[HardwareBridge] Init stack\n");
