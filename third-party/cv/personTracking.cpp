@@ -2,13 +2,7 @@
 #include <stdexcept>
 #include <opencv2/objdetect.hpp>
 #include <opencv2/highgui.hpp>
-#include <opencv2/tracking.hpp>
-#include <opencv2/imgproc.hpp>
-#include <opencv2/imgcodecs.hpp>
-#include <opencv2/video.hpp>
-#include <opencv2/videoio.hpp>
-#include <librealsense2/rs.hpp>
-#include "TCam.h"
+#include "personTracking.h"
 using namespace cv;
 using namespace std;
 #include <math.h>
@@ -19,7 +13,7 @@ using namespace std;
 //This is drawing the bounding box and return coordinates of center of box
 
 
-int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_intr) {
+int PersonTracker:: MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_intr) {
 
 	// Create tracker, select region-of-interest (ROI) and initialize the tracker
 	cv::Ptr<cv::Tracker> tracker = TrackerKCF::create();
@@ -72,7 +66,7 @@ int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_in
     pose.rpy[0] = 0;
     pose.rpy[1] = 0;
 		pose.rpy[2] = angle;
-		pose.distance_from_object = dist_to_center;
+		// pose.distance_from_object = dist_to_center;
 
 
 
@@ -137,15 +131,9 @@ int MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intrinsics &depth_in
 
 
 
-int personTracker::init()
+int PersonTracker::init()
 {
-
-	
-
-
-  // Access attributes and set values
-
-
+	  // Access attributes and set values
     HOGDescriptor hog;
     hog.setSVMDetector(HOGDescriptor::getDefaultPeopleDetector());
     namedWindow("people detector", 1);
@@ -215,6 +203,7 @@ int personTracker::init()
 				}
 
           MOSSE(frame,main_rect, p, depth_intr);
+          
 
     	return 0;
 		}

@@ -4,7 +4,14 @@
 
 #include <librealsense2/rs.hpp>
 #include <iostream>
-#include "cppTypes.h"
+#include <opencv2/tracking.hpp>
+#include <opencv2/imgproc.hpp>
+#include <opencv2/imgcodecs.hpp>
+#include <opencv2/video.hpp>
+#include <opencv2/videoio.hpp>
+#include <librealsense2/rs.hpp>
+using namespace cv;
+// #include "cppTypes.h"
 
 
 struct Pose{
@@ -12,12 +19,12 @@ struct Pose{
     float pose_y;
     float depth_to_person;
     float rpy[3];
-  ;
 };
 
-class personTracker{
+class PersonTracker{
 public:
     int init();
+    int MOSSE(Mat& frame,Rect& main_rect, rs2::pipeline &p, rs2_intrinsics &depth_intr);
     Pose pose;
 
 

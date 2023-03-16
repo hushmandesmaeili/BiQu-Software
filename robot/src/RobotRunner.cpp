@@ -180,7 +180,7 @@ void RobotRunner::setupStep() {
   // check transition to cheater mode:
   if (!_cheaterModeEnabled && controlParameters->cheater_mode) {
     printf("[RobotRunner] Transitioning to Cheater Mode...\n");
-    initializeStateEstimator(true, false);
+    initializeStateEstimator(true);
     // todo any configuration
     _cheaterModeEnabled = true;
   }
@@ -194,6 +194,7 @@ void RobotRunner::setupStep() {
   }
   // if rc controller nenabledabled
   get_rc_control_settings(&rc_control);
+  runPlanner();
   // if(RC_mode::PLANNER){
   //   get_planner_rc_settings(&rc_control);
   // }
@@ -225,7 +226,7 @@ void RobotRunner::finalizeStep() {
  * @param cheaterMode
  * @param biQu
  */
-void RobotRunner::initializeStateEstimator(bool cheaterMode, bool biQu) {
+void RobotRunner::initializeStateEstimator(bool cheaterMode) {
   _stateEstimator->removeAllEstimators();
   _stateEstimator->addEstimator<ContactEstimator<float>>();
   Vec4<float> contactDefault;
@@ -247,3 +248,18 @@ RobotRunner::~RobotRunner() {
 }
 
 void RobotRunner::cleanup() {}
+void RobotRunner::runVision() {
+  //
+  _tracker.init();
+  _visionData.tracker_x = _tracker.pose.pose_x;
+  _visionData.tracker_y= _tracker.pose.pose_y;
+  _visionData.tracker_depth = _tracker.pose.depth_to_person;
+  _visionData.tracker_rpy[0]= _tracker.pose.rpy[0];
+  _visionData.tracker_rpy[1]= _tracker.pose.rpy[1];
+  _visionData.tracker_rpy[2]= _tracker.pose.rpy[2];
+}
+void RobotRunner::runPlanner() {
+  runVision();
+  // _planner.tracker_to_rc_control(&_rc_control_input, _visionData);
+  _planner.tracker_to_rc_control(&rc_control, _visionData);
+}

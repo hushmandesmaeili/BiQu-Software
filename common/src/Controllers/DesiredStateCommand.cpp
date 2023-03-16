@@ -37,7 +37,7 @@ void DesiredStateCommand<T>::convertToStateCommands() {
       //height_cmd = rcCommand->height_variation;
 
     }else if(rcCommand->mode == RC_mode::LOCOMOTION ||
-        rcCommand->mode == RC_mode::VISION){ // Walking
+        rcCommand->mode == RC_mode::PLANNER || rcCommand->mode == RC_mode::VISION){ // Walking
       joystickLeft[0] = rcCommand->v_des[1]; // Y
       joystickLeft[1] = rcCommand->v_des[0]; // X
       joystickRight[0] = rcCommand->omega_des[2]; // Yaw

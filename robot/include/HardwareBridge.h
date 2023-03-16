@@ -18,7 +18,7 @@
 #include <lcm-cpp.hpp>
 #include <lord_imu/LordImu.h>
 #include <cv/personTracking.h>
-#include <planner/planner.h>
+
 
 #include "RobotRunner.h"
 #include "Utilities/PeriodicTask.h"
@@ -139,6 +139,8 @@ class BiQuHardwareBridge : public HardwareBridge {
   void runSpi();
   void initHardware();
   void run();
+  void runVision();
+  void runPlanner();
   // void runMicrostrain();
   // void logMicrostrain();
   void abort(const std::string& reason);
@@ -147,12 +149,12 @@ class BiQuHardwareBridge : public HardwareBridge {
  private:
   VectorNavData _vectorNavData;
   lcm::LCM _spiLcm;
-  PersonTracking _tracker;
+  PersonTracker _tracker;
   VisionData _visionData;
-  Planner _planner;
+  // Planner _planner;
   Rc_control_input _rc_control_input;
 
-  // lcm::LCM _microstrainLcm;
+  lcm::LCM _microstrainLcm;
   // std::thread _microstrainThread;
   // LordImu _microstrainImu;
   // microstrain_lcmt _microstrainData;

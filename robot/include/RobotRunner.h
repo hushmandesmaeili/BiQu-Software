@@ -26,6 +26,9 @@
 #include "state_estimator_lcmt.hpp"
 #include "RobotController.h"
 #include <lcm-cpp.hpp>
+#include "planner.h"
+#include <cv/personTracking.h>
+
 
 class RobotRunner : public PeriodicTask {
  public:
@@ -42,7 +45,6 @@ class RobotRunner : public PeriodicTask {
   virtual ~RobotRunner();
 
   RobotController* _robot_ctrl;
-
   GamepadCommand* driverCommand;
   RobotType robotType;
   VectorNavData* vectorNavData;
@@ -54,7 +56,11 @@ class RobotRunner : public PeriodicTask {
   RobotControlParameters* controlParameters;
   VisualizationData* visualizationData;
   CheetahVisualization* cheetahMainVisualization;
-
+  Planner _planner;
+  VisionData _visionData;
+  PersonTracker _tracker;
+  Rc_control_input _rc_control_input;
+  void runPlanner();
  private:
   float _ini_yaw;
 
@@ -62,6 +68,10 @@ class RobotRunner : public PeriodicTask {
 
   void setupStep();
   void finalizeStep();
+  
+  void runVision();
+  void* v_memcpy(void* dest, volatile void* src, size_t n);
+
 
   JPosInitializer<float>* _jpos_initializer;
   Quadruped<float> _quadruped;
@@ -72,6 +82,7 @@ class RobotRunner : public PeriodicTask {
   DesiredStateCommand<float>* _desiredStateCommand;
   rc_control_settings rc_control;
   lcm::LCM _lcm;
+  
   leg_control_command_lcmt leg_control_command_lcm;
   state_estimator_lcmt state_estimator_lcm;
   leg_control_data_lcmt leg_control_data_lcm;

@@ -348,8 +348,8 @@ void HardwareBridge::run_sbus() {
   if (_port > 0) {
     int x = receive_sbus(_port);
     if (x) {
-      // sbus_packet_complete();
-      sbus_packet_complete(rc_control_input);
+      sbus_packet_complete();
+      // sbus_packet_complete(_rc_control_input);
     }
   }
 }
@@ -679,13 +679,13 @@ void BiQuHardwareBridge::run() {
       &taskManager, .002, "spi", &BiQuHardwareBridge::runSpi, this);
   spiTask.start();
 
-  PeriodicMemberFunction<BiQuHardwareBridge> visionTask(
-      &taskManager, .002, "vision", &BiQuHardwareBridge::runVision, this);
-  visionTask.start();
+  // PeriodicMemberFunction<BiQuHardwareBridge> visionTask(
+  //     &taskManager, .002, "vision", &BiQuHardwareBridge::runVision, this);
+  // visionTask.start();
 
-  PeriodicMemberFunction<BiQuHardwareBridge> PlannerTask(
-      &taskManager, .002, "planner", &BiQuHardwareBridge::runPlanner, this);
-  plannerTask.start();
+  // PeriodicMemberFunction<BiQuHardwareBridge> plannerTask(
+  //     &taskManager, .002, "planner", &BiQuHardwareBridge::runPlanner, this);
+  // plannerTask.start();
 
   // microstrain
   // if(_microstrainInit)
@@ -749,20 +749,20 @@ void BiQuHardwareBridge::runSpi() {
   // _spiLcm.publish("spi_command", cmd);
 }
 
-void BiQuHardwareBridge::runVision() {
-  //
-  _tracker.init();
-  _visionData.tracker_x = _tracker.pose.pose_x;
-  _visionData.tracker_y= _tracker.pose.pose_y;
-  _visionData.tracker_depth = _tracker.depth_to_person;
-  _visionData.tracker_rpy[0]= _tracker.rpy[0];
-  _visionData.tracker_rpy[1]= _tracker.rpy[1];
-  _visionData.tracker_rpy[2]= _tracker.rpy[2];
-}
+// void BiQuHardwareBridge::runVision() {
+//   //
+//   _tracker.init();
+//   _visionData.tracker_x = _tracker.pose.pose_x;
+//   _visionData.tracker_y= _tracker.pose.pose_y;
+//   _visionData.tracker_depth = _tracker.pose.depth_to_person;
+//   _visionData.tracker_rpy[0]= _tracker.pose.rpy[0];
+//   _visionData.tracker_rpy[1]= _tracker.pose.rpy[1];
+//   _visionData.tracker_rpy[2]= _tracker.pose.rpy[2];
+// }
 
-void BiQuHardwareBridge::runPlanner() {
-  _planner.tracker_to_rc_control(&rc_control_input, _visionData);
+// void BiQuHardwareBridge::runPlanner() {
+//   _planner.tracker_to_rc_control(&_rc_control_input, _visionData);
   
-}
+// }
 
 // #endif

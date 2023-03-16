@@ -41,7 +41,7 @@ protected:
   GamepadCommand* _driverCommand = nullptr;
   RobotControlParameters* _controlParameters = nullptr;
   DesiredStateCommand<float>* _desiredStateCommand = nullptr;
-
+  
   VisualizationData* _visualizationData = nullptr;
   RobotType _robotType;
 };
