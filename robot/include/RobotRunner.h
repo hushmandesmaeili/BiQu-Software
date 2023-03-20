@@ -58,7 +58,7 @@ class RobotRunner : public PeriodicTask {
   CheetahVisualization* cheetahMainVisualization;
   Planner _planner;
   VisionData* _visionData;
-  PersonTracker _tracker;
+  // PersonTracker _tracker;
   Rc_control_input _rc_control_input;
   void runPlanner();
  private:

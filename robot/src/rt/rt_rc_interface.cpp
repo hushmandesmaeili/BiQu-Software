@@ -100,7 +100,7 @@ void sbus_packet_complete() {
           }
         }
         else if(mode_id == 1){ // Vision 
-          selected_mode = RC_mode::PLANNER;
+          selected_mode = RC_mode::VISION;
         }
       }
 

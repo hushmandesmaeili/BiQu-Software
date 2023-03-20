@@ -101,7 +101,7 @@ void ControlFSM<T>::runFSM() {
     if(rc_mode == RC_mode::RECOVERY_STAND){
       data.controlParameters->control_mode = K_RECOVERY_STAND;
 
-    } else if(rc_mode == RC_mode::LOCOMOTION || rc_mode:: PLANNER){
+    } else if(rc_mode == RC_mode::LOCOMOTION || rc_mode==  RC_mode::PLANNER){
       data.controlParameters->control_mode = K_LOCOMOTION;
 
     } else if(rc_mode == RC_mode::QP_STAND){

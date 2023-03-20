@@ -2,6 +2,10 @@
 #define CHEETAH_SOFTWARE_PLANNER_H
 #include<iostream>
 #include "../../robot/include/rt/rt_rc_interface.h"
+#include <string.h>
+static pthread_mutex_t lcm_get_set_mutex =
+PTHREAD_MUTEX_INITIALIZER; /**< mutex to protect gui settings coming over
+                             LCM */
 // struct Rc_control_input{
 //     double     p_des[2]; // (x, y) -1 ~ 1
 //     double     height_variation; // -1 ~ 1

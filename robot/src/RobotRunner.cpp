@@ -193,7 +193,7 @@ void RobotRunner::setupStep() {
     _cheaterModeEnabled = false;
   }
   // if rc controller nenabledabled
-  get_rc_control_settings(&rc_control);
+  // get_rc_control_settings(&rc_control);
   runPlanner();
   // if(RC_mode::PLANNER){
   //   get_planner_rc_settings(&rc_control);
@@ -250,13 +250,21 @@ RobotRunner::~RobotRunner() {
 void RobotRunner::cleanup() {}
 void RobotRunner::runVision() {
   //
-  _tracker.init();
-  _visionData->tracker_x = _tracker.pose.pose_x;
-  _visionData->tracker_y= _tracker.pose.pose_y;
-  _visionData->tracker_depth = _tracker.pose.depth_to_person;
-  _visionData->tracker_rpy[0]= _tracker.pose.rpy[0];
-  _visionData->tracker_rpy[1]= _tracker.pose.rpy[1];
-  _visionData->tracker_rpy[2]= _tracker.pose.rpy[2];
+  // _tracker.init();
+  // _visionData->tracker_x = _tracker.pose.pose_x;
+  // _visionData->tracker_y= _tracker.pose.pose_y;
+  // _visionData->tracker_depth = _tracker.pose.depth_to_person;
+  // _visionData->tracker_rpy[0]= _tracker.pose.rpy[0];
+  // _visionData->tracker_rpy[1]= _tracker.pose.rpy[1];
+  // _visionData->tracker_rpy[2]= _tracker.pose.rpy[2];
+
+  //  _tracker.init();
+  _visionData->tracker_x = 10;
+  _visionData->tracker_y= 10;
+  _visionData->tracker_depth = 2;
+  _visionData->tracker_rpy[0]= 0.1;
+  _visionData->tracker_rpy[1]=0.1;
+  _visionData->tracker_rpy[2]= 0.1;
 }
 void RobotRunner::runPlanner() {
   runVision();

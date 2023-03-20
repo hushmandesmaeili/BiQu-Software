@@ -149,7 +149,7 @@ class BiQuHardwareBridge : public HardwareBridge {
  private:
   VectorNavData _vectorNavData;
   lcm::LCM _spiLcm;
-  PersonTracker _tracker;
+  // PersonTracker _tracker;
   VisionData _visionData;
   // Planner _planner;
   Rc_control_input _rc_control_input;
