@@ -70,8 +70,6 @@ class RobotRunner : public PeriodicTask {
   void finalizeStep();
   
   void runVision();
-  void* v_memcpy(void* dest, volatile void* src, size_t n);
-
 
   JPosInitializer<float>* _jpos_initializer;
   Quadruped<float> _quadruped;

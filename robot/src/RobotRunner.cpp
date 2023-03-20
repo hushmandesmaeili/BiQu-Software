@@ -262,7 +262,7 @@ void RobotRunner::runPlanner() {
   runVision();
   int a = 0;
   int b = 0;
-  _planner.tracker_to_rc_control(rc_control, _visionData);
+  _planner.tracker_to_rc_control(&rc_control, _visionData);
   // _planner.tracker_to_rc_control();
 
   printf("%f\n", _planner.error_vel_x);
