@@ -26,7 +26,7 @@
 #include "state_estimator_lcmt.hpp"
 #include "RobotController.h"
 #include <lcm-cpp.hpp>
-#include "planner.h"
+#include "../../common/Planner/planner.h"
 #include <cv/personTracking.h>
 
 
@@ -57,7 +57,7 @@ class RobotRunner : public PeriodicTask {
   VisualizationData* visualizationData;
   CheetahVisualization* cheetahMainVisualization;
   Planner _planner;
-  VisionData _visionData;
+  VisionData* _visionData;
   PersonTracker _tracker;
   Rc_control_input _rc_control_input;
   void runPlanner();
