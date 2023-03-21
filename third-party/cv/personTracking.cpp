@@ -3,7 +3,7 @@
 #include <opencv2/objdetect.hpp>
 #include <opencv2/highgui.hpp>
 #include "personTracking.h"
-#include <thread>
+
 using namespace cv;
 using namespace std;
 #include <math.h>
@@ -81,8 +81,8 @@ int PersonTracker:: MOSSE(Mat &frame,Rect &main_rect, rs2::pipeline &p, rs2_intr
     std::cout << "The camera is facing an object " << dist_to_center << " meters away \r" <<endl;
 
 
-    // cv::imshow("video feed", frame);
-    // waitKey(30);
+    cv::imshow("video feed", frame);
+    waitKey(30);
 
 
 	}

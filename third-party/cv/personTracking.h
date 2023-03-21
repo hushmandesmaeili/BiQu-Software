@@ -25,7 +25,7 @@ class PersonTracker{
 public:
     int init();
     int MOSSE(Mat& frame,Rect& main_rect, rs2::pipeline &p, rs2_intrinsics &depth_intr);
-    int MosseRunner();
+    // int MosseRunner();
     Pose pose;
 
 

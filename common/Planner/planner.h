@@ -67,7 +67,7 @@ public:
         }
         if (vel_y > 2)
         {
-            vel_x = 2;
+            vel_y = 2;
         }
         else if (vel_y < 0)
         {
