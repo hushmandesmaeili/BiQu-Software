@@ -57,8 +57,8 @@ class RobotRunner : public PeriodicTask {
   VisualizationData* visualizationData;
   CheetahVisualization* cheetahMainVisualization;
   Planner _planner;
-  VisionData* _visionData;
-  // PersonTracker _tracker;
+  VisionData _visionData;
+  PersonTracker _tracker;
   Rc_control_input _rc_control_input;
   void runPlanner();
  private:
@@ -80,7 +80,7 @@ class RobotRunner : public PeriodicTask {
   DesiredStateCommand<float>* _desiredStateCommand;
   rc_control_settings rc_control;
   lcm::LCM _lcm;
-  
+  std::thread _visionThread;
   leg_control_command_lcmt leg_control_command_lcm;
   state_estimator_lcmt state_estimator_lcm;
   leg_control_data_lcmt leg_control_data_lcm;

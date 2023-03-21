@@ -17,7 +17,7 @@
 #include "Utilities/Timer.h"
 #include "Controllers/PositionVelocityEstimator.h"
 //#include "rt/rt_interface_lcm.h"
-
+#include <thread>
 RobotRunner::RobotRunner(RobotController* robot_ctrl, 
     PeriodicTaskManager* manager, 
     float period, std::string name):
@@ -74,6 +74,7 @@ void RobotRunner::init() {
   _robot_ctrl->_desiredStateCommand = _desiredStateCommand;
 
   _robot_ctrl->initializeController();
+   _visionThread = std::thread(&RobotRunner::runVision, this);  
 
 }
 
@@ -194,7 +195,10 @@ void RobotRunner::setupStep() {
   }
   // if rc controller nenabledabled
   // get_rc_control_settings(&rc_control);
-  runPlanner();
+    
+  printf("----------Printa-----------\n");
+ runPlanner();
+  printf("----------Printb-----------\n");
   // if(RC_mode::PLANNER){
   //   get_planner_rc_settings(&rc_control);
   // }
@@ -249,28 +253,29 @@ RobotRunner::~RobotRunner() {
 
 void RobotRunner::cleanup() {}
 void RobotRunner::runVision() {
-  //
-  // _tracker.init();
-  // _visionData->tracker_x = _tracker.pose.pose_x;
-  // _visionData->tracker_y= _tracker.pose.pose_y;
-  // _visionData->tracker_depth = _tracker.pose.depth_to_person;
-  // _visionData->tracker_rpy[0]= _tracker.pose.rpy[0];
-  // _visionData->tracker_rpy[1]= _tracker.pose.rpy[1];
-  // _visionData->tracker_rpy[2]= _tracker.pose.rpy[2];
+  
+  _tracker.init();
+  _visionData.tracker_x = _tracker.pose.pose_x;
+  _visionData.tracker_y= _tracker.pose.pose_y;
+  _visionData.tracker_depth = _tracker.pose.depth_to_person;
+  _visionData.tracker_rpy[0]= _tracker.pose.rpy[0];
+  _visionData.tracker_rpy[1]= _tracker.pose.rpy[1];
+  _visionData.tracker_rpy[2]= _tracker.pose.rpy[2];
 
   //  _tracker.init();
-  _visionData->tracker_x = 10;
-  _visionData->tracker_y= 10;
-  _visionData->tracker_depth = 2;
-  _visionData->tracker_rpy[0]= 0.1;
-  _visionData->tracker_rpy[1]=0.1;
-  _visionData->tracker_rpy[2]= 0.1;
+  // _visionData.tracker_x = 10.0;
+  // _visionData.tracker_y= 10.0;
+  // _visionData.tracker_depth = 2.0;
+  // _visionData.tracker_rpy[0]= 0.1;
+  // _visionData.tracker_rpy[1]=0.1;
+  // _visionData.tracker_rpy[2]= 0.1;
 }
 void RobotRunner::runPlanner() {
-  runVision();
-  int a = 0;
-  int b = 0;
+  printf("----------Printc-----------\n");
+  // runVision();
+  printf("----------Printd-----------\n");
   _planner.tracker_to_rc_control(&rc_control, _visionData);
+  printf("----------Printe-----------\n");
   // _planner.tracker_to_rc_control();
 
   printf("%f\n", _planner.error_vel_x);
