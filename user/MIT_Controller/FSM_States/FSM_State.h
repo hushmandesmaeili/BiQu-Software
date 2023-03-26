@@ -14,6 +14,7 @@
 #define K_STAND_UP 1
 #define K_BALANCE_STAND 3
 #define K_LOCOMOTION 4
+#define K_PLANNER 10
 #define K_LOCOMOTION_TEST 5
 #define K_RECOVERY_STAND 6
 #define K_VISION 8

@@ -254,28 +254,41 @@ RobotRunner::~RobotRunner() {
 void RobotRunner::cleanup() {}
 void RobotRunner::runVision() {
   
-  _tracker.init();
-  _visionData.tracker_x = _tracker.pose.pose_x;
-  _visionData.tracker_y= _tracker.pose.pose_y;
-  _visionData.tracker_depth = _tracker.pose.depth_to_person;
-  _visionData.tracker_rpy[0]= _tracker.pose.rpy[0];
-  _visionData.tracker_rpy[1]= _tracker.pose.rpy[1];
-  _visionData.tracker_rpy[2]= _tracker.pose.rpy[2];
+  // _tracker.init();
+  // _visionData.tracker_x = _tracker.pose.pose_x;
+  // _visionData.tracker_y= _tracker.pose.pose_y;
+  // _visionData.tracker_depth = _tracker.pose.depth_to_person;
+  // _visionData.tracker_rpy[0]= _tracker.pose.rpy[0];
+  // _visionData.tracker_rpy[1]= _tracker.pose.rpy[1];
+  // _visionData.tracker_rpy[2]= _tracker.pose.rpy[2];
 
-  //  _tracker.init();
-  // _visionData.tracker_x = 10.0;
-  // _visionData.tracker_y= 10.0;
-  // _visionData.tracker_depth = 2.0;
-  // _visionData.tracker_rpy[0]= 0.1;
-  // _visionData.tracker_rpy[1]=0.1;
-  // _visionData.tracker_rpy[2]= 0.1;
+  _tracker.init();
+  _visionData.tracker_x = 10.0;
+  _visionData.tracker_y= 10.0;
+  _visionData.tracker_depth = 2.0;
+  _visionData.tracker_rpy[0]= 0.1;
+  _visionData.tracker_rpy[1]=0.1;
+  _visionData.tracker_rpy[2]= 0.1;
 }
 void RobotRunner::runPlanner() {
   printf("----------Printc-----------\n");
   // runVision();
   printf("----------Printd-----------\n");
-  _planner.tracker_to_rc_control(&rc_control, _visionData);
+  // _planner.tracker_to_rc_control(&rc_control, _visionData);
+  rc_control.v_des[0] = 2;
+  rc_control.v_des[1] = 2;
+  rc_control.v_des[2] = 0;
+
+  rc_control.rpy_des[0] = 0;
+  rc_control.rpy_des[1] = 0;
+  rc_control.rpy_des[2] = 3.14/4;
+  rc_control.omega_des[0] = 0;
+  rc_control.omega_des[1] = 0;
+  rc_control.omega_des[2] = 0;
+
+
   printf("----------Printe-----------\n");
+  printf("%f heerrrreeee\n",rc_control.v_des[1]);
   // _planner.tracker_to_rc_control();
 
   printf("%f\n", _planner.error_vel_x);
