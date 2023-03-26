@@ -194,10 +194,10 @@ void RobotRunner::setupStep() {
     _cheaterModeEnabled = false;
   }
   // if rc controller nenabledabled
-  // get_rc_control_settings(&rc_control);
+  get_rc_control_settings(&rc_control);
     
   printf("----------Printa-----------\n");
- runPlanner();
+//  runPlanner();
   printf("----------Printb-----------\n");
   // if(RC_mode::PLANNER){
   //   get_planner_rc_settings(&rc_control);
