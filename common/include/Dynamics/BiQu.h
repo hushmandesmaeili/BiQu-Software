@@ -38,9 +38,9 @@ Quadruped<T> buildBiQu()
     biqu._batteryV = 24;
     /* KT = flux linkage * number of poles,
     where the number of poles P = 12 for the Antigravity MN4004 KV300 motor.
-    Flux linkage is estimated with $\lambda_{m} = \frac{60}{2\pi P\sqrt{3}K_{v}}$. Thus,
-    $K_{t} = 0.018*/
-    biqu._motorKT = .018;
+    Flux linkage is estimated with $\lambda_{m} = \frac{3}{2}\frac{60}{2\pi P\sqrt{3}K_{v}}$. Thus,
+    $K_{t} = 0.02756*/
+    biqu._motorKT = .02756;
     biqu._motorR = 0.452;
     biqu._jointDamping = .01;
     biqu._jointDryFriction = .2;
