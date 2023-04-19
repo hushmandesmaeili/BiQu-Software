@@ -34,7 +34,7 @@ Quadruped<T> buildBiQu()
     biqu._kneeLinkLength = 0.1675;
     biqu._maxLegLength = 0.3275;
 
-    biqu._motorTauMax = 0.27;
+    biqu._motorTauMax = 2.7;
     biqu._batteryV = 24;
     /* KT = flux linkage * number of poles,
     where the number of poles P = 12 for the Antigravity MN4004 KV300 motor.
